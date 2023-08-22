@@ -1,0 +1,3 @@
+/home/paul/Programming/Games/shooter-game/build/CMakeFiles/shooter-game.dir
+/home/paul/Programming/Games/shooter-game/build/CMakeFiles/edit_cache.dir
+/home/paul/Programming/Games/shooter-game/build/CMakeFiles/rebuild_cache.dir

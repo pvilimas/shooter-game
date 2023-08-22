@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/test_clangd.dir/src/main.c.o -o test_clangd  -lglib-2.0 -lraylib 
