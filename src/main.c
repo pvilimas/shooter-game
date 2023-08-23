@@ -12,11 +12,14 @@ int main() {
         SG_WINDOW_TITLE
     );
     SetTargetFPS(60);
+     // disable exit key when not debugging
+    if (!DEBUGGING) SetExitKey(0);
 
     SG_Game* g = SG_NewGame();
 
     while (!WindowShouldClose()) {
         BeginDrawing();
+        SG_HandleInput(g);
         SG_Draw(g);
         EndDrawing();
     }

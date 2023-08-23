@@ -11,4 +11,6 @@
 #define SG_DEFAULT_SCREEN_H 600
 #define SG_WINDOW_TITLE "Shooter Game"
 
+#define DEBUGGING 1
+
 #endif // SG_COMMON_H

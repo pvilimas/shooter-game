@@ -20,6 +20,9 @@ void        SG_Draw(SG_Game* g);
 void        SG_Quit(SG_Game* g);
 
 // specific draw functions
-void SG_DrawPlayer(SG_Game* g);
+void        SG_DrawPlayer(SG_Game* g);
+
+// other
+void        SG_HandleInput(SG_Game* g);
 
 #endif // SG_GAME_H

@@ -16,7 +16,7 @@ SG_Game* SG_NewGame(){
 
 void SG_Draw(SG_Game* g){
     ClearBackground(WHITE);
-    DrawText("cocks", GetMouseX(), GetMouseY(), 20, BLACK);
+    SG_DrawPlayer(g);
 }
 
 void SG_Quit(SG_Game* g){
@@ -24,5 +24,20 @@ void SG_Quit(SG_Game* g){
 }
 
 void SG_DrawPlayer(SG_Game* g) {
-    
+    DrawCircle(g->player.pos.x, g->player.pos.y, 5.0f, BLACK);
+}
+
+void SG_HandleInput(SG_Game* g) {
+    if (IsKeyDown(KEY_W)) {
+        g->player.pos.y -= 1;
+    }
+    if (IsKeyDown(KEY_A)) {
+        g->player.pos.x -= 1;
+    }
+    if (IsKeyDown(KEY_S)) {
+        g->player.pos.y += 1;
+    }
+    if (IsKeyDown(KEY_D)) {
+        g->player.pos.x += 1;
+    }
 }
