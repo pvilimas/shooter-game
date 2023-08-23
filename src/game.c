@@ -22,3 +22,7 @@ void SG_Draw(SG_Game* g){
 void SG_Quit(SG_Game* g){
     // raylib cleanup functions run here
 }
+
+void SG_DrawPlayer(SG_Game* g) {
+    
+}

@@ -8,10 +8,5 @@
   "directory": "/home/paul/Programming/Games/shooter-game/build",
   "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/game.c.o -c /home/paul/Programming/Games/shooter-game/src/game.c",
   "file": "/home/paul/Programming/Games/shooter-game/src/game.c"
-},
-{
-  "directory": "/home/paul/Programming/Games/shooter-game/build",
-  "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/player.c.o -c /home/paul/Programming/Games/shooter-game/src/player.c",
-  "file": "/home/paul/Programming/Games/shooter-game/src/player.c"
 }
 ]

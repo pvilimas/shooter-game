@@ -3,7 +3,9 @@
 
 #include "common.h"
 
-#include "player.h"
+typedef struct {
+    Vector2 pos;
+} SG_Player;
 
 // the game class
 typedef struct {
@@ -12,8 +14,12 @@ typedef struct {
     Camera2D camera;
 } SG_Game;
 
+// functions for managing game state
 SG_Game*    SG_NewGame();
 void        SG_Draw(SG_Game* g);
 void        SG_Quit(SG_Game* g);
+
+// specific draw functions
+void SG_DrawPlayer(SG_Game* g);
 
 #endif // SG_GAME_H

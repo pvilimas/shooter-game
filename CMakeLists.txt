@@ -10,7 +10,6 @@ pkg_check_modules(RAYLIB REQUIRED raylib)
 add_executable(${PROJECT_NAME}
     src/main.c
     src/game.c
-    src/player.c
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${GLIB_INCLUDE_DIRS})
