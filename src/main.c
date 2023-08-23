@@ -1,17 +1,27 @@
-#include "raylib.h"
+#include "common.h"
+
+#include "game.h"
 
 int main() {
 
     SetTraceLogLevel(LOG_WARNING);
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_TOPMOST);
-    InitWindow(800, 600, "shooter game");
+    InitWindow(
+        SG_DEFAULT_SCREEN_W,
+        SG_DEFAULT_SCREEN_H,
+        SG_WINDOW_TITLE
+    );
+    SetTargetFPS(60);
+
+    SG_Game* g = SG_NewGame();
 
     while (!WindowShouldClose()) {
         BeginDrawing();
-        ClearBackground(WHITE);
-        DrawText("cocks", GetMouseX(), GetMouseY(), 20, BLACK);
-        EndDrawing();        
+        SG_Draw(g);
+        EndDrawing();
     }
+
+    SG_Quit(g);
 
     return 0;
 }
