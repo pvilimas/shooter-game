@@ -15,7 +15,7 @@ SG_Game* SG_NewGame(){
 }
 
 void SG_Draw(SG_Game* g){
-    ClearBackground(WHITE);
+    ClearBackground(RAYWHITE);
     SG_DrawPlayer(g);
 }
 
@@ -27,7 +27,10 @@ void SG_DrawPlayer(SG_Game* g) {
     DrawCircle(g->player.pos.x, g->player.pos.y, 5.0f, BLACK);
 }
 
+// Handle all key input and player movement
 void SG_HandleInput(SG_Game* g) {
+    // TODO add sequential key presses, so like if W is pressed 
+    // and then S, character continues moving up
     if (IsKeyDown(KEY_W)) {
         g->player.pos.y -= 1;
     }

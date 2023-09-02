@@ -12,6 +12,7 @@ typedef struct {
     Vector2 screenSize;
     SG_Player player;
     Camera2D camera;
+    Texture2D bgTileTex;
 } SG_Game;
 
 // functions for managing game state
