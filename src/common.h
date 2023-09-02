@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#include "glib.h"
 #include "raylib.h"
 
 #define SG_DEFAULT_SCREEN_W 800

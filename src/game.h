@@ -21,6 +21,7 @@ void        SG_Draw(SG_Game* g);
 void        SG_Quit(SG_Game* g);
 
 // specific draw functions
+void        SG_DrawBackgroundTiles(SG_Game* g);
 void        SG_DrawPlayer(SG_Game* g);
 
 // other

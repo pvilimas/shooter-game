@@ -1,6 +1,6 @@
 # ninja log v5
-0	21	1692741839688768265	CMakeFiles/test_clangd.dir/src/main.c.o	a362ef1ab35819c5
 28	52	1692848545214804316	shooter-game	8a1b1925a4cf5af8
+0	21	1692741839688768265	CMakeFiles/test_clangd.dir/src/main.c.o	a362ef1ab35819c5
 0	21	1692752109561121958	CMakeFiles/shooter-game.dir/src/main.c.o	7ede37ca123fa364
-1	28	1692848545190804948	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc
 1	17	1692748673072758744	CMakeFiles/shooter-game.dir/src/player.c.o	3502356941b0a2f2
+1	28	1692848545190804948	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc

@@ -23,6 +23,11 @@ void SG_Quit(SG_Game* g){
     // raylib cleanup functions run here
 }
 
+void SG_DrawBackgroundTiles(SG_Game* g) {
+    ClearBackground(RAYWHITE);
+    
+}
+
 void SG_DrawPlayer(SG_Game* g) {
     DrawCircle(g->player.pos.x, g->player.pos.y, 5.0f, BLACK);
 }
