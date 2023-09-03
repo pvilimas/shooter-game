@@ -81,3 +81,6 @@
 60	82	1693783438997381834	shooter-game	8f02c2563caf9b08
 1	64	1693783586261484333	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc
 64	86	1693783586285483698	shooter-game	8f02c2563caf9b08
+1	51	1693784282199066634	CMakeFiles/shooter-game.dir/src/main.c.o	7ede37ca123fa364
+1	58	1693784317982123707	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc
+58	83	1693784318006123074	shooter-game	8f02c2563caf9b08

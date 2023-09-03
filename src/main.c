@@ -18,13 +18,13 @@ int main() {
     // for dev mode, make sure cwd is shooter-game not build
     ChangeDirectory("..");
 
-    SG_Game* g = SG_NewGame();
+    SG_Init();
 
     while (!WindowShouldClose()) {
-        SG_Draw(g);
+        SG_Draw();
     }
 
-    SG_Quit(g);
+    SG_Quit();
 
     return 0;
 }
