@@ -1,6 +1,7 @@
 #ifndef SG_COMMON_H
 #define SG_COMMON_H
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>

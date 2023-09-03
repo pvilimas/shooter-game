@@ -12,8 +12,11 @@ int main() {
         SG_WINDOW_TITLE
     );
     SetTargetFPS(60);
-     // disable exit key when not debugging
+
+    // disable exit key when not debugging
     if (!DEBUGGING) SetExitKey(0);
+    // for dev mode, make sure cwd is shooter-game not build
+    ChangeDirectory("..");
 
     SG_Game* g = SG_NewGame();
 

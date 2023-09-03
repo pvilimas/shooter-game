@@ -12,19 +12,18 @@ typedef struct {
     Vector2 screenSize;
     SG_Player player;
     Camera2D camera;
-    Texture2D bgTileTex;
+
+    Texture2D bgTexture;
 } SG_Game;
 
-// functions for managing game state
+// managing game state
 SG_Game*    SG_NewGame();
 void        SG_Draw(SG_Game* g);
 void        SG_Quit(SG_Game* g);
 
-// specific draw functions
+// game loop functions
 void        SG_DrawBackgroundTiles(SG_Game* g);
 void        SG_DrawPlayer(SG_Game* g);
-
-// other
 void        SG_HandleInput(SG_Game* g);
 
 #endif // SG_GAME_H
