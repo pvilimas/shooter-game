@@ -12,8 +12,13 @@ add_executable(${PROJECT_NAME}
     src/game.c
 )
 
+# glib
 target_include_directories(${PROJECT_NAME} PRIVATE ${GLIB_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${GLIB_LIBRARIES})
 
+# raylib
 target_include_directories(${PROJECT_NAME} PRIVATE ${RAYLIB_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${RAYLIB_LIBRARIES})
+
+# math.h
+target_link_libraries(${PROJECT_NAME} PRIVATE m)

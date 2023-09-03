@@ -5,7 +5,7 @@
 int main() {
 
     SetTraceLogLevel(LOG_WARNING);
-    SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_TOPMOST);
+    SetConfigFlags(FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT | FLAG_WINDOW_TOPMOST | FLAG_WINDOW_RESIZABLE);
     InitWindow(
         SG_DEFAULT_SCREEN_W,
         SG_DEFAULT_SCREEN_H,
@@ -21,10 +21,7 @@ int main() {
     SG_Game* g = SG_NewGame();
 
     while (!WindowShouldClose()) {
-        BeginDrawing();
-        SG_HandleInput(g);
         SG_Draw(g);
-        EndDrawing();
     }
 
     SG_Quit(g);

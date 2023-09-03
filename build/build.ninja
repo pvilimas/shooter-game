@@ -73,7 +73,7 @@ build CMakeFiles/shooter-game.dir/src/game.c.o: C_COMPILER__shooter-game_Debug /
 
 build shooter-game: C_EXECUTABLE_LINKER__shooter-game_Debug CMakeFiles/shooter-game.dir/src/main.c.o CMakeFiles/shooter-game.dir/src/game.c.o
   FLAGS = -g
-  LINK_LIBRARIES = -lglib-2.0  -lraylib
+  LINK_LIBRARIES = -lglib-2.0  -lraylib  -lm
   OBJECT_DIR = CMakeFiles/shooter-game.dir
   POST_BUILD = :
   PRE_LINK = :

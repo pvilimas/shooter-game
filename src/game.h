@@ -13,7 +13,8 @@ typedef struct {
     SG_Player player;
     Camera2D camera;
 
-    Texture2D bgTexture;
+    GHashTable* textures;   // <cchar*, Texture2D*>
+    GHashTable* fonts;      // <cchar*, Font*>
 } SG_Game;
 
 // managing game state
@@ -22,8 +23,24 @@ void        SG_Draw(SG_Game* g);
 void        SG_Quit(SG_Game* g);
 
 // game loop functions
-void        SG_DrawBackgroundTiles(SG_Game* g);
 void        SG_DrawPlayer(SG_Game* g);
+void        SG_DrawBackgroundTiles(SG_Game* g);
 void        SG_HandleInput(SG_Game* g);
+
+// asset handling
+void        SG_LoadTexture(SG_Game* g, char* name, const char* filepath);
+Texture2D*  SG_GetTexture(SG_Game* g, char* name);
+void        SG_UnloadTexture(SG_Game* g, char* name);
+
+void        SG_LoadFont(SG_Game* g, char* name, const char* filepath);
+Font*       SG_GetFont(SG_Game* g, char* name);
+void        SG_UnloadFont(SG_Game* g, char* name);
+
+void        SG_UnloadAssets(SG_Game* g);
+
+// callbacks
+
+void        SG_FreeTextureCallback(void* texture);
+void        SG_FreeFontCallback(void* font);
 
 #endif // SG_GAME_H
