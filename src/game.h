@@ -24,7 +24,7 @@ void        SG_Quit(SG_Game* g);
 
 // game loop functions
 void        SG_DrawPlayer(SG_Game* g);
-void        SG_DrawBackgroundTiles(SG_Game* g);
+void        SG_TileBackground(SG_Game* g);
 void        SG_HandleInput(SG_Game* g);
 
 // asset handling

@@ -22,7 +22,7 @@ SG_Game* SG_NewGame(){
     g->fonts = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, SG_FreeFontCallback);
 
-    SG_LoadTexture(g, "bg tile", "assets/bg.png");
+    SG_LoadTexture(g, "background", "assets/bg.png");
 
     return g;
 }
@@ -42,21 +42,7 @@ void SG_Draw(SG_Game* g) {
             
             /* all in-game objects get drawn here */
 
-            // bg tiling
-            Texture2D bg_texture = *SG_GetTexture(g, "bg tile");
-            int tile_cols = ceil(g->screenSize.x / bg_texture.width);
-            int tile_rows = ceil(g->screenSize.y / bg_texture.height);
-            for (int x = 0; x < g->screenSize.x; x += bg_texture.width) {
-                for (int y = 0; y < g->screenSize.y; y += bg_texture.height) {
-                    DrawTexture(
-                        bg_texture,
-                        x - (g->screenSize.x / 2),
-                        y - (g->screenSize.y / 2),
-                        WHITE
-                    );
-                }
-            }
-
+            SG_TileBackground(g);
             SG_DrawPlayer(g);
 
         EndMode2D();
@@ -75,8 +61,24 @@ void SG_DrawPlayer(SG_Game* g) {
     DrawCircle(g->player.pos.x, g->player.pos.y, 5.0f, BLACK);
 }
 
-void SG_DrawBackgroundTiles(SG_Game* g) {
+void SG_TileBackground(SG_Game* g) {
+    Texture2D bg_texture = *SG_GetTexture(g, "background");
+    int i0 = ((g->player.pos.x - g->screenSize.x/2) / bg_texture.width) - 1;
+    int i1 = ((g->player.pos.x + g->screenSize.x/2) / bg_texture.width) + 1;
+    int j0 = ((g->player.pos.y - g->screenSize.y/2) / bg_texture.height) - 1;
+    int j1 = ((g->player.pos.y + g->screenSize.y/2) / bg_texture.height) + 1;
+
     ClearBackground(RAYWHITE);
+    for (int i = i0; i < i1; i++) {
+        for (int j = j0; j < j1; j++) {
+            DrawTexture(
+                bg_texture,
+                i * bg_texture.width,
+                j * bg_texture.height,
+                (Color){255, 255, 255, 255}
+            );
+        }
+    }
 }
 
 // Handle all key input and move the player
