@@ -70,6 +70,8 @@ Vector2     GetCameraOffset();
 Vector2     GetAbsMousePosition();
 bool        PointOnScreen(Vector2 p);
 bool        PointNearScreen(Vector2 p, float range);
+int         RandInt(int min, int max);
+float       RandFloat(float min, float max);
 
 // game functions
 void        HandleInput();

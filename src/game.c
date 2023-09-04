@@ -49,7 +49,7 @@ void Init() {
     game.frame_count = 0;
 
     CreateTexture("background", "assets/bg.png");
-    CreateTimer(PlayerShootAtMouseCallback, 5.0, -1);
+    CreateTimer(PlayerShootAtMouseCallback, 1.0, -1);
     CreateTimer(SpawnEnemyCallback, 0.1, -1);
 }
 
@@ -112,6 +112,14 @@ bool PointNearScreen(Vector2 p, float range) {
         && p.y <= game.camera.target.y - range + GetScreenHeight() / 2;
 }
 
+int RandInt(int min, int max) {
+   return min + rand() / (RAND_MAX / (max - min + 1) + 1);
+}
+
+float RandFloat(float min, float max) {
+    return min + (float)rand() / ((float)(RAND_MAX/(max-min)));
+}
+
 // Handle all key input and move the player
 void HandleInput() {
     // TODO add sequential key presses, so like if W is pressed 
@@ -154,9 +162,9 @@ void DrawUI() {
     // player health bar
     for (int i = 0; i < 5; i++) {
         DrawRectangleRec((Rectangle){20+(40*i), 20, 43, 15}, BLACK);
-        if (game.player.health >= i) {
-            DrawRectangleRec((Rectangle){23+(40*i), 23, 37, 9}, (Color){255, 0, 0, 255});
-        }
+    }
+    for (int i = 0; i < game.player.health; i++) {
+        DrawRectangleRec((Rectangle){23+(40*i), 23, 37, 9}, (Color){255, 0, 0, 255});
     }
 }
 
@@ -194,6 +202,25 @@ void RenderEnemies() {
         if (player_takes_dmg) {
             game.player.health--;
             game.player.iframes = 120;
+        }
+
+        // check collision between enemy and bullet
+        for (int j = 0; j < game.bullets->len; j++) {
+            Bullet* b = game.bullets->pdata[j];
+            if (Vector2Distance(e->pos, b->pos) > 50) {
+                continue;
+            }
+            bool enemy_takes_dmg = CheckCollisionCircles(
+                e->pos, e->hitbox_radius,
+                b->pos, b->hitbox_radius);
+            if (enemy_takes_dmg) {
+                e->health--;
+                g_ptr_array_remove_index_fast(game.bullets, j);
+            }
+        }
+        
+        if (e->health <= 0) {
+            g_ptr_array_remove_index_fast(game.enemies, i);
         }
 
         // draw
@@ -236,7 +263,7 @@ void SpawnEnemy(Vector2 pos, float angle, int speed) {
 
 void SpawnBullet(Vector2 pos, float angle, int speed) {
     Bullet* b = malloc(sizeof(Bullet));
-    *b = (Bullet){pos, angle, speed, 120, 1, 10};
+    *b = (Bullet){pos, angle, speed, 60, 1, 10};
     g_ptr_array_add(game.bullets, b);
 }
 
@@ -333,7 +360,7 @@ void PlayerShootAtMouseCallback() {
     int dy = abs_mouse_pos.y - game.player.pos.y;
     double angle = atan2(dy, dx);
     for (int i = 0; i < 5; i++) {
-        SpawnBullet(game.player.pos, angle - 0.125 + (0.05 * i), 10);
+        SpawnBullet(game.player.pos, RandFloat(angle - 0.125, angle + 0.125), 10);
     }
 }
 
