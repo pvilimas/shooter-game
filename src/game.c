@@ -69,6 +69,12 @@ void Draw() {
 
             TileBackground();
             DrawPlayer();
+            for (int i = 0; i < game.enemies->len; i++) {
+                DrawEnemy(game.enemies->pdata[i]);
+            }
+            for (int i = 0; i < game.bullets->len; i++) {
+                DrawBullet(game.bullets->pdata[i]);
+            }
 
         EndMode2D();
 
@@ -122,24 +128,40 @@ void TileBackground() {
     }
 }
 
-void DrawPlayer() {
-    DrawCircle(game.player.pos.x, game.player.pos.y, 5.0f, BLACK);
-}
-
 void DrawUI() {
     DrawHealthBar();
 }
 
 void DrawHealthBar() {
     for (int i = 0; i < game.player.health; i++) {
-        DrawRectangleRec((Rectangle){20+(40*i), 20, 40, 15}, BLACK);
-        DrawRectangleRec((Rectangle){23+(40*i), 23, 34, 9}, (Color){255, 0, 0, 255});
+        DrawRectangleRec((Rectangle){20+(40*i), 20, 43, 15}, BLACK);
+        DrawRectangleRec((Rectangle){23+(40*i), 23, 37, 9}, (Color){255, 0, 0, 255});
     }
 }
 
-void CreateEnemy(Vector2 pos, Vector2 speed) {
+void DrawPlayer() {
+    DrawCircle(game.player.pos.x, game.player.pos.y, 5.0f, BLACK);
+}
+
+void DrawEnemy(Enemy* e) {
+    DrawCircle(e->pos.x, e->pos.y, 25, BLACK);
+    DrawCircle(e->pos.x, e->pos.y, 22, RED);
+}
+
+void DrawBullet(Bullet* b) {
+    DrawLineEx(
+        (Vector2){b->pos.x - cos(b->angle) * 5, b->pos.y - sin(b->angle) * 5},
+        (Vector2){b->pos.x + cos(b->angle) * 5, b->pos.y + sin(b->angle) * 5},
+        4.0f, BLACK);
+    DrawLineEx(
+        (Vector2){b->pos.x - cos(b->angle) * 4, b->pos.y - sin(b->angle) * 4},
+        (Vector2){b->pos.x + cos(b->angle) * 4, b->pos.y + sin(b->angle) * 4},
+        3.0f, WHITE);
+}
+
+void CreateEnemy(Vector2 pos, float angle, int speed) {
     Enemy* e = malloc(sizeof(Enemy));
-    *e = (Enemy){pos, speed};
+    *e = (Enemy){pos, angle, speed};
     g_ptr_array_add(game.enemies, e);
 }
 
@@ -150,12 +172,13 @@ void UpdateEnemies() {
 }
 
 void UpdateEnemy(Enemy* e) {
-    e->pos = Vector2Add(e->pos, e->speed);
+    e->pos.x += cos(e->angle) * e->speed;
+    e->pos.y += sin(e->angle) * e->speed;
 }
 
-void CreateBullet(Vector2 pos, Vector2 speed) {
+void CreateBullet(Vector2 pos, float angle, int speed) {
     Bullet* b = malloc(sizeof(Bullet));
-    *b = (Bullet){pos, speed};
+    *b = (Bullet){pos, angle, speed};
     g_ptr_array_add(game.bullets, b);
 }
 
@@ -166,7 +189,8 @@ void UpdateBullets() {
 }
 
 void UpdateBullet(Bullet* b) {
-    b->pos = Vector2Add(b->pos, b->speed);
+    b->pos.x += cos(b->angle) * b->speed;
+    b->pos.y += sin(b->angle) * b->speed;
 }
 
 void CreateTimer(TimerCallback fn, double interval, int num_triggers) {
@@ -254,5 +278,5 @@ void PlayerShootAtMouseCallback() {
     int dx = GetMouseX() - game.player.pos.x;
     int dy = GetMouseY() - game.player.pos.y;
     double angle = atan2(dy, dx);
-    CreateBullet(game.player.pos, (Vector2){cos(angle)*10, sin(angle)*10});
+    CreateBullet(game.player.pos, angle, 10);
 }

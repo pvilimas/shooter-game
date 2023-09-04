@@ -13,13 +13,14 @@ typedef struct {
 
 typedef struct {
     Vector2 pos;
-    Vector2 speed; // 2
+    float angle; // 0 = ->
+    int speed; // 2
 } Enemy;
 
 typedef struct {
     Vector2 pos;
-    Vector2 speed; // 10
-    int lifetime; // decrements every frame
+    float angle;
+    int speed; // 10
 } Bullet;
 
 // timer class
@@ -60,20 +61,20 @@ void        Quit();
 void        HandleInput();
 
 void        TileBackground();
-void        DrawPlayer();
-
 void        DrawUI();
 void        DrawHealthBar();
 
-void        CreateEnemy(Vector2 pos, Vector2 speed);
+void        DrawPlayer();
+void        DrawEnemy(Enemy* e);
+void        DrawBullet(Bullet* b);
+
+void        CreateEnemy(Vector2 pos, float angle, int speed);
 void        UpdateEnemies();
 void        UpdateEnemy(Enemy* e);
-void        DrawEnemy(Enemy* e);
 
-void        CreateBullet(Vector2 pos, Vector2 speed);
+void        CreateBullet(Vector2 pos, float angle, int speed);
 void        UpdateBullets();
 void        UpdateBullet(Bullet* b);
-void        DrawBullet(Bullet* b);
 
 void        CreateTimer(TimerCallback fn, double interval, int num_triggers);
 void        UpdateTimers();
