@@ -1,5 +1,5 @@
-#ifndef SG_COMMON_H
-#define SG_COMMON_H
+#ifndef COMMON_H
+#define COMMON_H
 
 #include <assert.h>
 #include <math.h>
@@ -10,10 +10,10 @@
 #include "glib.h"
 #include "raylib.h"
 
-#define SG_DEFAULT_SCREEN_W 800
-#define SG_DEFAULT_SCREEN_H 600
-#define SG_WINDOW_TITLE "Shooter Game"
+#define DEFAULT_SCREEN_W 800
+#define DEFAULT_SCREEN_H 600
+#define WINDOW_TITLE "Shooter Game"
 
 #define DEBUGGING 1
 
-#endif // SG_COMMON_H
+#endif // COMMON_H
