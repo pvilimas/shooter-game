@@ -7,13 +7,17 @@
 typedef struct {
     Vector2 pos;
     int speed; // 3
-    int health;
+    int health; // 5
+    int iframes; // # invincibility frames remaining
+    int hitbox_radius;
 } Player;
 
 typedef struct {
     Vector2 pos;
     float angle; // 0 = ->
     int speed; // 2
+    int health; // 1
+    int hitbox_radius;
 } Enemy;
 
 typedef struct {
@@ -21,6 +25,8 @@ typedef struct {
     float angle;
     int speed; // 10
     int lifetime; // decrements each frame to 0
+    int damage; // 1
+    int hitbox_radius;
 } Bullet;
 
 // timer class
@@ -70,26 +76,18 @@ void        HandleInput();
 
 void        TileBackground();
 void        DrawUI();
-void        DrawHealthBar();
 
-void        DrawPlayer();
-void        DrawEnemies();
-void        DrawBullets();
+void        RenderPlayer();
 
-void        DrawEnemy(Enemy* e);
-void        DrawBullet(Bullet* b);
+void        RenderEnemies();
+void        RenderBullets();
 
-void        CreateEnemy(Vector2 pos, float angle, int speed);
-void        UpdateEnemies();
-void        UpdateEnemy(Enemy* e);
-
-void        CreateBullet(Vector2 pos, float angle, int speed);
-void        UpdateBullets();
-void        UpdateBullet(Bullet* b);
+void        SpawnEnemy(Vector2 pos, float angle, int speed);
+void        SpawnBullet(Vector2 pos, float angle, int speed);
 
 void        CreateTimer(TimerCallback fn, double interval, int num_triggers);
-void        UpdateTimers();
 bool        UpdateTimer(Timer* t);
+void        UpdateTimers();
 
 // TODO
 void        CheckCollisions();

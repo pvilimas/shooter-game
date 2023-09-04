@@ -26,7 +26,9 @@ void Init() {
     };
     game.player = (Player) {
         .pos = { 0, 0 },
-        .health = 5
+        .health = 5,
+        .iframes = 0,
+        .hitbox_radius = 5
     };
     game.camera = (Camera2D) {
         .target = game.player.pos, /* target follows player */
@@ -54,10 +56,7 @@ void Init() {
 // one iteration of the game loop
 void Draw() {
 
-    HandleInput();
     UpdateTimers();
-    UpdateEnemies();
-    UpdateBullets();
 
     // update camera target to player
     game.camera.target = game.player.pos;
@@ -66,15 +65,11 @@ void Draw() {
         BeginMode2D(game.camera);
             
             /* all in-game objects get drawn here */
-
+            
             TileBackground();
-            DrawPlayer();
-            for (int i = 0; i < game.enemies->len; i++) {
-                DrawEnemy(game.enemies->pdata[i]);
-            }
-            for (int i = 0; i < game.bullets->len; i++) {
-                DrawBullet(game.bullets->pdata[i]);
-            }
+            RenderPlayer();
+            RenderEnemies();
+            RenderBullets();
 
         EndMode2D();
 
@@ -156,10 +151,7 @@ void TileBackground() {
 }
 
 void DrawUI() {
-    DrawHealthBar();
-}
-
-void DrawHealthBar() {
+    // player health bar
     for (int i = 0; i < 5; i++) {
         DrawRectangleRec((Rectangle){20+(40*i), 20, 43, 15}, BLACK);
         if (game.player.health >= i) {
@@ -168,80 +160,84 @@ void DrawHealthBar() {
     }
 }
 
-void DrawPlayer() {
-    DrawCircle(game.player.pos.x, game.player.pos.y, 5.0f, BLACK);
+void RenderPlayer() {
+    // update
+    HandleInput();
+    if (game.player.iframes != 0) {
+        game.player.iframes--;
+    }
+
+    // draw
+    if (game.player.iframes % 20 < 10) {
+        DrawCircle(game.player.pos.x, game.player.pos.y, 5.0f, BLACK);
+    }
 }
 
-void DrawEnemies() {
+void RenderEnemies() {
     for (int i = 0; i < game.enemies->len; i++) {
-        DrawEnemy(game.enemies->pdata[i]);
+
+        Enemy* e = game.enemies->pdata[i];
+
+        // update
+        // track player
+        int dx = game.player.pos.x - e->pos.x;
+        int dy = game.player.pos.y - e->pos.y;
+        e->angle = atan2(dy, dx);
+
+        e->pos.x += cos(e->angle) * e->speed;
+        e->pos.y += sin(e->angle) * e->speed;
+
+        // check collision between enemy and player
+        bool player_takes_dmg = !game.player.iframes && CheckCollisionCircles(
+            e->pos, e->hitbox_radius,
+            game.player.pos, game.player.hitbox_radius);
+        if (player_takes_dmg) {
+            game.player.health--;
+            game.player.iframes = 120;
+        }
+
+        // draw
+        DrawCircle(e->pos.x, e->pos.y, 25, BLACK);
+        DrawCircle(e->pos.x, e->pos.y, 22, RED);
     }
 }
 
-void DrawBullets() {
+void RenderBullets() {
     for (int i = 0; i < game.bullets->len; i++) {
-        DrawBullet(game.enemies->pdata[i]);
-    }
-}
 
-void DrawEnemy(Enemy* e) {
-    DrawCircle(e->pos.x, e->pos.y, 25, BLACK);
-    DrawCircle(e->pos.x, e->pos.y, 22, RED);
-}
-
-void DrawBullet(Bullet* b) {
-    DrawLineEx(
-        (Vector2){b->pos.x - cos(b->angle) * 5, b->pos.y - sin(b->angle) * 5},
-        (Vector2){b->pos.x + cos(b->angle) * 5, b->pos.y + sin(b->angle) * 5},
-        4.0f, BLACK);
-    DrawLineEx(
-        (Vector2){b->pos.x - cos(b->angle) * 4, b->pos.y - sin(b->angle) * 4},
-        (Vector2){b->pos.x + cos(b->angle) * 4, b->pos.y + sin(b->angle) * 4},
-        3.0f, WHITE);
-}
-
-void CreateEnemy(Vector2 pos, float angle, int speed) {
-    Enemy* e = malloc(sizeof(Enemy));
-    *e = (Enemy){pos, angle, speed};
-    g_ptr_array_add(game.enemies, e);
-}
-
-void UpdateEnemies() {
-    for (int i = 0; i < game.enemies->len; i++) {
-        UpdateEnemy(game.enemies->pdata[i]);
-    }
-}
-
-void UpdateEnemy(Enemy* e) {
-    // track player
-    int dx = game.player.pos.x - e->pos.x;
-    int dy = game.player.pos.y - e->pos.y;
-    e->angle = atan2(dy, dx);
-
-    e->pos.x += cos(e->angle) * e->speed;
-    e->pos.y += sin(e->angle) * e->speed;
-}
-
-void CreateBullet(Vector2 pos, float angle, int speed) {
-    Bullet* b = malloc(sizeof(Bullet));
-    *b = (Bullet){pos, angle, speed, 120};
-    g_ptr_array_add(game.bullets, b);
-}
-
-void UpdateBullets() {
-    for (int i = 0; i < game.bullets->len; i++) {
         Bullet* b = game.bullets->pdata[i];
-        UpdateBullet(b);
+
+        // update
+        b->pos.x += cos(b->angle) * b->speed;
+        b->pos.y += sin(b->angle) * b->speed;
+        b->lifetime--;
+
         if (b->lifetime == 0) {
             g_ptr_array_remove_index_fast(game.bullets, i);
         }
+
+        // draw
+        DrawLineEx(
+            (Vector2){b->pos.x - cos(b->angle) * 5, b->pos.y - sin(b->angle) * 5},
+            (Vector2){b->pos.x + cos(b->angle) * 5, b->pos.y + sin(b->angle) * 5},
+            4.0f, BLACK);
+        DrawLineEx(
+            (Vector2){b->pos.x - cos(b->angle) * 4, b->pos.y - sin(b->angle) * 4},
+            (Vector2){b->pos.x + cos(b->angle) * 4, b->pos.y + sin(b->angle) * 4},
+            3.0f, WHITE);
     }
 }
 
-void UpdateBullet(Bullet* b) {
-    b->pos.x += cos(b->angle) * b->speed;
-    b->pos.y += sin(b->angle) * b->speed;
-    b->lifetime--;
+void SpawnEnemy(Vector2 pos, float angle, int speed) {
+    Enemy* e = malloc(sizeof(Enemy));
+    *e = (Enemy){pos, angle, speed, 1, 25};
+    g_ptr_array_add(game.enemies, e);
+}
+
+void SpawnBullet(Vector2 pos, float angle, int speed) {
+    Bullet* b = malloc(sizeof(Bullet));
+    *b = (Bullet){pos, angle, speed, 120, 1, 10};
+    g_ptr_array_add(game.bullets, b);
 }
 
 void CreateTimer(TimerCallback fn, double interval, int num_triggers) {
@@ -253,14 +249,6 @@ void CreateTimer(TimerCallback fn, double interval, int num_triggers) {
         .last_recorded = GetTime()
     };
     g_ptr_array_add(game.timers, t);
-}
-
-void UpdateTimers() {
-    for (int i = 0; i < game.timers->len; i++) {
-        if (UpdateTimer(game.timers->pdata[i])) {
-            g_ptr_array_remove_index_fast(game.timers, i);
-        }
-    }
 }
 
 // returns true if timer is out of triggers
@@ -278,6 +266,14 @@ bool UpdateTimer(Timer* t) {
     }
 
     return false;
+}
+
+void UpdateTimers() {
+    for (int i = 0; i < game.timers->len; i++) {
+        if (UpdateTimer(game.timers->pdata[i])) {
+            g_ptr_array_remove_index_fast(game.timers, i);
+        }
+    }
 }
 
 void UnloadAssets() {
@@ -337,7 +333,7 @@ void PlayerShootAtMouseCallback() {
     int dy = abs_mouse_pos.y - game.player.pos.y;
     double angle = atan2(dy, dx);
     for (int i = 0; i < 5; i++) {
-        CreateBullet(game.player.pos, angle - 0.125 + (0.05 * i), 10);
+        SpawnBullet(game.player.pos, angle - 0.125 + (0.05 * i), 10);
     }
 }
 
@@ -357,5 +353,5 @@ void SpawnEnemyCallback() {
     int dx = game.player.pos.x - pos.x;
     int dy = game.player.pos.y - pos.y;
     double angle = atan2(dy, dx);
-    CreateEnemy(pos, angle, 1);
+    SpawnEnemy(pos, angle, 1);
 }
