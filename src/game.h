@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+#define DEBUGGING 1
+
 // the types of entities
 typedef struct {
     Vector2 pos;
@@ -52,6 +54,7 @@ typedef struct {
     Camera2D    camera;
     Player      player;
 
+    // TODO change to GArray
     GPtrArray*  enemies;        // <Enemy*>
     GPtrArray*  bullets;        // <Bullet*>
     GPtrArray*  timers;         // <Timer*>
@@ -73,7 +76,6 @@ void        Draw();
 void        Quit();
 
 // math/utils
-
 Vector2     GetCameraOffset();
 Vector2     GetAbsMousePosition();
 bool        PointOnScreen(Vector2 p);

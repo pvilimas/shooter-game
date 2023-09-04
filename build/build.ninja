@@ -49,15 +49,15 @@ cmake_ninja_workdir = /home/paul/Programming/Games/shooter-game/build/
 
 build cmake_object_order_depends_target_shooter-game: phony || CMakeFiles/shooter-game.dir
 
-build CMakeFiles/shooter-game.dir/src/main.c.o: C_COMPILER__shooter-game_Debug /home/paul/Programming/Games/shooter-game/src/main.c || cmake_object_order_depends_target_shooter-game
-  DEP_FILE = CMakeFiles/shooter-game.dir/src/main.c.o.d
+build CMakeFiles/shooter-game.dir/src/game.c.o: C_COMPILER__shooter-game_Debug /home/paul/Programming/Games/shooter-game/src/game.c || cmake_object_order_depends_target_shooter-game
+  DEP_FILE = CMakeFiles/shooter-game.dir/src/game.c.o.d
   FLAGS = -g -std=gnu11
   INCLUDES = -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
   OBJECT_DIR = CMakeFiles/shooter-game.dir
   OBJECT_FILE_DIR = CMakeFiles/shooter-game.dir/src
 
-build CMakeFiles/shooter-game.dir/src/game.c.o: C_COMPILER__shooter-game_Debug /home/paul/Programming/Games/shooter-game/src/game.c || cmake_object_order_depends_target_shooter-game
-  DEP_FILE = CMakeFiles/shooter-game.dir/src/game.c.o.d
+build CMakeFiles/shooter-game.dir/src/main.c.o: C_COMPILER__shooter-game_Debug /home/paul/Programming/Games/shooter-game/src/main.c || cmake_object_order_depends_target_shooter-game
+  DEP_FILE = CMakeFiles/shooter-game.dir/src/main.c.o.d
   FLAGS = -g -std=gnu11
   INCLUDES = -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
   OBJECT_DIR = CMakeFiles/shooter-game.dir
@@ -71,7 +71,7 @@ build CMakeFiles/shooter-game.dir/src/game.c.o: C_COMPILER__shooter-game_Debug /
 #############################################
 # Link the executable shooter-game
 
-build shooter-game: C_EXECUTABLE_LINKER__shooter-game_Debug CMakeFiles/shooter-game.dir/src/main.c.o CMakeFiles/shooter-game.dir/src/game.c.o
+build shooter-game: C_EXECUTABLE_LINKER__shooter-game_Debug CMakeFiles/shooter-game.dir/src/game.c.o CMakeFiles/shooter-game.dir/src/main.c.o
   FLAGS = -g
   LINK_LIBRARIES = -lglib-2.0  -lraylib  -lm
   OBJECT_DIR = CMakeFiles/shooter-game.dir

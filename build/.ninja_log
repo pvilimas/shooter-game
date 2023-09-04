@@ -1,10 +1,10 @@
 # ninja log v5
-1	86	1693856887723212513	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc
 1	17	1692748673072758744	CMakeFiles/shooter-game.dir/src/player.c.o	3502356941b0a2f2
-1	56	1693856887691213360	CMakeFiles/shooter-game.dir/src/main.c.o	7ede37ca123fa364
-86	113	1693856887747211877	shooter-game	8f02c2563caf9b08
+1	67	1693864723086538421	build.ninja	21bbb8b1b1e15721
+0	81	1693864628773034163	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc
+1	55	1693864628749034798	CMakeFiles/shooter-game.dir/src/main.c.o	7ede37ca123fa364
 0	21	1692741839688768265	CMakeFiles/test_clangd.dir/src/main.c.o	a362ef1ab35819c5
-1	67	1693859365045625065	build.ninja	21bbb8b1b1e15721
-0	54	1693859365129622842	CMakeFiles/shooter-game.dir/src/main.c.o	7ede37ca123fa364
-1	82	1693859365157622101	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc
-82	107	1693859365185621359	shooter-game	8f02c2563caf9b08
+87	111	1693863667042425140	shooter-game	8f02c2563caf9b08
+1	57	1693864726378451310	CMakeFiles/shooter-game.dir/src/main.c.o	7ede37ca123fa364
+1	84	1693864726406450569	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc
+84	109	1693864726430449934	shooter-game	fc2bd11d5d0a7a1a

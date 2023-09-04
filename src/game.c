@@ -6,10 +6,7 @@ void Config() {
 
     SetTraceLogLevel(LOG_WARNING);
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
-    InitWindow(
-        DEFAULT_SCREEN_W,
-        DEFAULT_SCREEN_H,
-        WINDOW_TITLE);
+    InitWindow(DEFAULT_SCREEN_W, DEFAULT_SCREEN_H, WINDOW_TITLE);
     ToggleFullscreen();
 
     // disable exit key when not debugging

@@ -1,6 +1,3 @@
-#ifndef COMMON_H
-#define COMMON_H
-
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
@@ -15,6 +12,3 @@
 #define DEFAULT_SCREEN_H 1080
 #define WINDOW_TITLE "Shooter Game"
 
-#define DEBUGGING 1
-
-#endif // COMMON_H
