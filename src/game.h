@@ -4,7 +4,6 @@
 #include "common.h"
 
 // the types of entities
-// TODO unify these into a single type
 typedef struct {
     Vector2 pos;
     int speed; // 3
@@ -21,6 +20,7 @@ typedef struct {
     Vector2 pos;
     float angle;
     int speed; // 10
+    int lifetime; // decrements each frame to 0
 } Bullet;
 
 // timer class
@@ -30,7 +30,6 @@ typedef struct {
     double interval;
     int num_triggers; // -1 = inf
     TimerCallback fn;
-
     double last_recorded;
 } Timer;
 
@@ -40,12 +39,14 @@ typedef struct {
     Camera2D    camera;
     Player      player;
 
-    GPtrArray*  enemies;    // <Enemy*>
-    GPtrArray*  bullets;    // <Bullet*>
-    GPtrArray*  timers;     // <Timer*>
+    GPtrArray*  enemies;        // <Enemy*>
+    GPtrArray*  bullets;        // <Bullet*>
+    GPtrArray*  timers;         // <Timer*>
 
-    GHashTable* textures;   // <cchar*, Texture2D*>
-    GHashTable* fonts;      // <cchar*, Font*>
+    GHashTable* textures;       // <cchar*, Texture2D*>
+    GHashTable* fonts;          // <cchar*, Font*>
+
+    int         frame_count;    // increment every frame
 } Game;
 
 // global instance of the game
@@ -61,6 +62,8 @@ void        Quit();
 
 Vector2     GetCameraOffset();
 Vector2     GetAbsMousePosition();
+bool        PointOnScreen(Vector2 p);
+bool        PointNearScreen(Vector2 p, float range);
 
 // game functions
 void        HandleInput();
@@ -88,6 +91,9 @@ void        CreateTimer(TimerCallback fn, double interval, int num_triggers);
 void        UpdateTimers();
 bool        UpdateTimer(Timer* t);
 
+// TODO
+void        CheckCollisions();
+
 // asset handling
 void        UnloadAssets();
 
@@ -105,5 +111,6 @@ void        FreeTextureCallback(void* texture);
 void        FreeFontCallback(void* font);
 void        DefaultTimerCallback();
 void        PlayerShootAtMouseCallback();
+void        SpawnEnemyCallback();
 
 #endif // GAME_H

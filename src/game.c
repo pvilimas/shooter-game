@@ -5,14 +5,12 @@ void Config() {
     srand(time(NULL));
 
     SetTraceLogLevel(LOG_WARNING);
-    SetConfigFlags(FLAG_VSYNC_HINT
-        | FLAG_MSAA_4X_HINT 
-        | FLAG_WINDOW_TOPMOST 
-        | FLAG_WINDOW_RESIZABLE);
+    SetConfigFlags(FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
     InitWindow(
         DEFAULT_SCREEN_W,
         DEFAULT_SCREEN_H,
         WINDOW_TITLE);
+    ToggleFullscreen();
 
     // disable exit key when not debugging
     if (!DEBUGGING) SetExitKey(0);
@@ -46,8 +44,11 @@ void Init() {
     game.fonts = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, FreeFontCallback);
 
+    game.frame_count = 0;
+
     CreateTexture("background", "assets/bg.png");
-    CreateTimer(PlayerShootAtMouseCallback, 1.0, -1);
+    CreateTimer(PlayerShootAtMouseCallback, 5.0, -1);
+    CreateTimer(SpawnEnemyCallback, 0.1, -1);
 }
 
 // one iteration of the game loop
@@ -62,7 +63,6 @@ void Draw() {
     game.camera.target = game.player.pos;
 
     BeginDrawing();
-
         BeginMode2D(game.camera);
             
             /* all in-game objects get drawn here */
@@ -81,8 +81,8 @@ void Draw() {
         /* static ui elements get drawn here */
 
         DrawUI();
-
     EndDrawing();
+    game.frame_count++;
 }
 
 void Quit() {
@@ -101,6 +101,20 @@ Vector2 GetCameraOffset() {
 // absolute mouse position, accounting for camera offset
 Vector2 GetAbsMousePosition() {
     return Vector2Add(GetMousePosition(), GetCameraOffset());
+}
+
+// returns true if p is onscreen
+bool PointOnScreen(Vector2 p) {
+    return PointNearScreen(p, 0.0f);
+}
+
+// returns true if p is onscreen or within range pixels of screen edge
+// negative range works as expected
+bool PointNearScreen(Vector2 p, float range) {
+    return p.x >= game.camera.target.x + range - GetScreenWidth() / 2
+        && p.x <= game.camera.target.x - range + GetScreenWidth() / 2
+        && p.y >= game.camera.target.y + range - GetScreenHeight() / 2
+        && p.y <= game.camera.target.y - range + GetScreenHeight() / 2;
 }
 
 // Handle all key input and move the player
@@ -123,10 +137,10 @@ void HandleInput() {
 
 void TileBackground() {
     Texture2D bg_texture = *GetTexture("background");
-    int i0 = ((game.player.pos.x - game.screen_size.x/2) / bg_texture.width) - 2;
-    int i1 = ((game.player.pos.x + game.screen_size.x/2) / bg_texture.width) + 2;
-    int j0 = ((game.player.pos.y - game.screen_size.y/2) / bg_texture.height) - 2;
-    int j1 = ((game.player.pos.y + game.screen_size.y/2) / bg_texture.height) + 2;
+    int i0 = ((game.player.pos.x - game.screen_size.x/2) / bg_texture.width) - 5;
+    int i1 = ((game.player.pos.x + game.screen_size.x/2) / bg_texture.width) + 5;
+    int j0 = ((game.player.pos.y - game.screen_size.y/2) / bg_texture.height) - 5;
+    int j1 = ((game.player.pos.y + game.screen_size.y/2) / bg_texture.height) + 5;
 
     ClearBackground(RAYWHITE);
     for (int i = i0; i < i1; i++) {
@@ -199,25 +213,35 @@ void UpdateEnemies() {
 }
 
 void UpdateEnemy(Enemy* e) {
+    // track player
+    int dx = game.player.pos.x - e->pos.x;
+    int dy = game.player.pos.y - e->pos.y;
+    e->angle = atan2(dy, dx);
+
     e->pos.x += cos(e->angle) * e->speed;
     e->pos.y += sin(e->angle) * e->speed;
 }
 
 void CreateBullet(Vector2 pos, float angle, int speed) {
     Bullet* b = malloc(sizeof(Bullet));
-    *b = (Bullet){pos, angle, speed};
+    *b = (Bullet){pos, angle, speed, 120};
     g_ptr_array_add(game.bullets, b);
 }
 
 void UpdateBullets() {
     for (int i = 0; i < game.bullets->len; i++) {
-        UpdateBullet(game.bullets->pdata[i]);
+        Bullet* b = game.bullets->pdata[i];
+        UpdateBullet(b);
+        if (b->lifetime == 0) {
+            g_ptr_array_remove_index_fast(game.bullets, i);
+        }
     }
 }
 
 void UpdateBullet(Bullet* b) {
     b->pos.x += cos(b->angle) * b->speed;
     b->pos.y += sin(b->angle) * b->speed;
+    b->lifetime--;
 }
 
 void CreateTimer(TimerCallback fn, double interval, int num_triggers) {
@@ -307,18 +331,31 @@ void DefaultTimerCallback() {
    
 }
 
-// void PlayerShootAtMouseCallback() {
-//     int dx = GetMouseX() - game.player.pos.x;
-//     int dy = GetMouseY() - game.player.pos.y;
-//     double angle = atan2(dy, dx);
-//     CreateBullet(game.player.pos, angle, 10);
-// }
-
 void PlayerShootAtMouseCallback() {
-    Vector2 abs_mouse_position = GetAbsMousePosition();
-    int dx = abs_mouse_position.x - game.player.pos.x;
-    int dy = abs_mouse_position.y - game.player.pos.y;
+    Vector2 abs_mouse_pos = GetAbsMousePosition();
+    int dx = abs_mouse_pos.x - game.player.pos.x;
+    int dy = abs_mouse_pos.y - game.player.pos.y;
     double angle = atan2(dy, dx);
+    for (int i = 0; i < 5; i++) {
+        CreateBullet(game.player.pos, angle - 0.125 + (0.05 * i), 10);
+    }
+}
 
-    CreateBullet(game.player.pos, angle, 10);
+void SpawnEnemyCallback() {
+    int enemy_spawn_radius = sqrt(2 * (pow(game.screen_size.x, 2) + pow(game.screen_size.y, 2)));
+    Vector2 camera_offset = GetCameraOffset();
+    Vector2 pos = {
+        GetRandomValue(camera_offset.x - enemy_spawn_radius, camera_offset.x + enemy_spawn_radius),
+        GetRandomValue(camera_offset.y - enemy_spawn_radius, camera_offset.y + enemy_spawn_radius)
+    };
+    while (PointNearScreen(pos, 10)) {
+        pos = (Vector2){
+            GetRandomValue(camera_offset.x - enemy_spawn_radius, camera_offset.x + enemy_spawn_radius),
+            GetRandomValue(camera_offset.y - enemy_spawn_radius, camera_offset.y + enemy_spawn_radius)
+        };
+    }
+    int dx = game.player.pos.x - pos.x;
+    int dy = game.player.pos.y - pos.y;
+    double angle = atan2(dy, dx);
+    CreateEnemy(pos, angle, 1);
 }
