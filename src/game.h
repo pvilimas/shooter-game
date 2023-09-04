@@ -49,7 +49,7 @@ typedef enum {
 } Scene;
 
 // the game class
-typedef struct {
+typedef struct _game {
     Vector2     screen_size;
     Camera2D    camera;
     Player      player;
