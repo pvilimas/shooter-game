@@ -49,13 +49,12 @@ void Init() {
     game.frame_count = 0;
 
     CreateTexture("background", "assets/bg.png");
-    CreateTimer(PlayerShootAtMouseCallback, 1.0, -1);
+    CreateTimer(PlayerShootAtMouseCallback, 1.0, 5);
     CreateTimer(SpawnEnemyCallback, 0.1, -1);
 }
 
 // one iteration of the game loop
 void Draw() {
-
     UpdateTimers();
 
     // update camera target to player
@@ -271,7 +270,7 @@ void CreateTimer(TimerCallback fn, double interval, int num_triggers) {
     Timer* t = malloc(sizeof(Timer));
     *t = (Timer) {
         .interval = interval,
-        .num_triggers = num_triggers,
+        .num_triggers = num_triggers == 0,
         .fn = fn,
         .last_recorded = GetTime()
     };
@@ -287,8 +286,11 @@ bool UpdateTimer(Timer* t) {
 
     t->last_recorded = now;
     t->fn();
+    if (t->num_triggers > -1) {
+        t->num_triggers--;
+    }
 
-    if (--t->num_triggers == 0) {
+    if (!t->num_triggers) {
         return true;
     }
 
