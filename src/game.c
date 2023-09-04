@@ -90,6 +90,19 @@ void Quit() {
     UnloadAssets();
 }
 
+// offset of the camera from the origin
+Vector2 GetCameraOffset() {
+    return (Vector2){
+        game.camera.target.x - GetScreenWidth() / 2,
+        game.camera.target.y - GetScreenHeight() / 2
+    };
+}
+
+// absolute mouse position, accounting for camera offset
+Vector2 GetAbsMousePosition() {
+    return Vector2Add(GetMousePosition(), GetCameraOffset());
+}
+
 // Handle all key input and move the player
 void HandleInput() {
     // TODO add sequential key presses, so like if W is pressed 
@@ -133,14 +146,28 @@ void DrawUI() {
 }
 
 void DrawHealthBar() {
-    for (int i = 0; i < game.player.health; i++) {
+    for (int i = 0; i < 5; i++) {
         DrawRectangleRec((Rectangle){20+(40*i), 20, 43, 15}, BLACK);
-        DrawRectangleRec((Rectangle){23+(40*i), 23, 37, 9}, (Color){255, 0, 0, 255});
+        if (game.player.health >= i) {
+            DrawRectangleRec((Rectangle){23+(40*i), 23, 37, 9}, (Color){255, 0, 0, 255});
+        }
     }
 }
 
 void DrawPlayer() {
     DrawCircle(game.player.pos.x, game.player.pos.y, 5.0f, BLACK);
+}
+
+void DrawEnemies() {
+    for (int i = 0; i < game.enemies->len; i++) {
+        DrawEnemy(game.enemies->pdata[i]);
+    }
+}
+
+void DrawBullets() {
+    for (int i = 0; i < game.bullets->len; i++) {
+        DrawBullet(game.enemies->pdata[i]);
+    }
 }
 
 void DrawEnemy(Enemy* e) {
@@ -280,9 +307,18 @@ void DefaultTimerCallback() {
    
 }
 
+// void PlayerShootAtMouseCallback() {
+//     int dx = GetMouseX() - game.player.pos.x;
+//     int dy = GetMouseY() - game.player.pos.y;
+//     double angle = atan2(dy, dx);
+//     CreateBullet(game.player.pos, angle, 10);
+// }
+
 void PlayerShootAtMouseCallback() {
-    int dx = GetMouseX() - game.player.pos.x;
-    int dy = GetMouseY() - game.player.pos.y;
+    Vector2 abs_mouse_position = GetAbsMousePosition();
+    int dx = abs_mouse_position.x - game.player.pos.x;
+    int dy = abs_mouse_position.y - game.player.pos.y;
     double angle = atan2(dy, dx);
+
     CreateBullet(game.player.pos, angle, 10);
 }

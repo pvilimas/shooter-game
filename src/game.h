@@ -57,6 +57,11 @@ void        Init();
 void        Draw();
 void        Quit();
 
+// math/utils
+
+Vector2     GetCameraOffset();
+Vector2     GetAbsMousePosition();
+
 // game functions
 void        HandleInput();
 
@@ -65,6 +70,9 @@ void        DrawUI();
 void        DrawHealthBar();
 
 void        DrawPlayer();
+void        DrawEnemies();
+void        DrawBullets();
+
 void        DrawEnemy(Enemy* e);
 void        DrawBullet(Bullet* b);
 
