@@ -2,6 +2,8 @@
 
 // raylib configuration and system setup functions
 void Config() {
+    srand(time(NULL));
+
     SetTraceLogLevel(LOG_WARNING);
     SetConfigFlags(FLAG_VSYNC_HINT
         | FLAG_MSAA_4X_HINT 
@@ -36,6 +38,8 @@ void Init() {
     };
 
     game.timers = g_ptr_array_new();
+    game.enemies = g_ptr_array_new();
+    game.bullets = g_ptr_array_new();
 
     game.textures = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, FreeTextureCallback);
@@ -43,12 +47,16 @@ void Init() {
         NULL, FreeFontCallback);
 
     CreateTexture("background", "assets/bg.png");
+    CreateTimer(PlayerShootAtMouseCallback, 1.0, -1);
 }
 
 // one iteration of the game loop
 void Draw() {
 
     HandleInput();
+    UpdateTimers();
+    UpdateEnemies();
+    UpdateBullets();
 
     // update camera target to player
     game.camera.target = game.player.pos;
@@ -71,7 +79,7 @@ void Draw() {
     EndDrawing();
 }
 
-void Quit(){
+void Quit() {
     // raylib cleanup functions run here
     UnloadAssets();
 }
@@ -129,7 +137,39 @@ void DrawHealthBar() {
     }
 }
 
-void CreateTimer(double interval, int num_triggers, TimerCallback fn) {
+void CreateEnemy(Vector2 pos, Vector2 speed) {
+    Enemy* e = malloc(sizeof(Enemy));
+    *e = (Enemy){pos, speed};
+    g_ptr_array_add(game.enemies, e);
+}
+
+void UpdateEnemies() {
+    for (int i = 0; i < game.enemies->len; i++) {
+        UpdateEnemy(game.enemies->pdata[i]);
+    }
+}
+
+void UpdateEnemy(Enemy* e) {
+    e->pos = Vector2Add(e->pos, e->speed);
+}
+
+void CreateBullet(Vector2 pos, Vector2 speed) {
+    Bullet* b = malloc(sizeof(Bullet));
+    *b = (Bullet){pos, speed};
+    g_ptr_array_add(game.bullets, b);
+}
+
+void UpdateBullets() {
+    for (int i = 0; i < game.bullets->len; i++) {
+        UpdateBullet(game.bullets->pdata[i]);
+    }
+}
+
+void UpdateBullet(Bullet* b) {
+    b->pos = Vector2Add(b->pos, b->speed);
+}
+
+void CreateTimer(TimerCallback fn, double interval, int num_triggers) {
     Timer* t = malloc(sizeof(Timer));
     *t = (Timer) {
         .interval = interval,
@@ -139,16 +179,16 @@ void CreateTimer(double interval, int num_triggers, TimerCallback fn) {
     };
 }
 
-void CheckTimers() {
+void UpdateTimers() {
     for (int i = 0; i < game.timers->len; i++) {
-        if (CheckTimer(game.timers->pdata[i])) {
+        if (UpdateTimer(game.timers->pdata[i])) {
             g_ptr_array_remove_index_fast(game.timers, i);
         }
     }
 }
 
 // returns true if timer is out of triggers
-bool CheckTimer(Timer* t) {
+bool UpdateTimer(Timer* t) {
     double now = GetTime();
     if (now - t->last_recorded < t->interval) {
         return false;
@@ -169,9 +209,9 @@ void UnloadAssets() {
 }
 
 void CreateTexture(char* name, const char* filepath) {
-    Texture2D* tp = malloc(sizeof(Texture2D));
-    *tp = LoadTexture(filepath);
-    g_hash_table_insert(game.textures, name, tp);
+    Texture2D* t = malloc(sizeof(Texture2D));
+    *t = LoadTexture(filepath);
+    g_hash_table_insert(game.textures, name, t);
 }
 
 Texture2D* GetTexture(char* name) {
@@ -183,9 +223,9 @@ void DeleteTexture(char* name) {
 }
 
 void CreateFont(char* name, const char* filepath) {
-    Font* tp = malloc(sizeof(Font));
-    *tp = LoadFont(filepath);
-    g_hash_table_insert(game.fonts, name, tp);
+    Font* f = malloc(sizeof(Font));
+    *f = LoadFont(filepath);
+    g_hash_table_insert(game.fonts, name, f);
 }
 
 Font* GetFont(char* name) {
@@ -204,4 +244,15 @@ void FreeTextureCallback(void* texture) {
 void FreeFontCallback(void* font) {
     UnloadFont(*(Font*)font);
     free(font);
+}
+
+void DefaultTimerCallback() {
+   
+}
+
+void PlayerShootAtMouseCallback() {
+    int dx = GetMouseX() - game.player.pos.x;
+    int dy = GetMouseY() - game.player.pos.y;
+    double angle = atan2(dy, dx);
+    CreateBullet(game.player.pos, (Vector2){cos(angle)*10, sin(angle)*10});
 }

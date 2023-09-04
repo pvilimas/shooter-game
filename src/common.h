@@ -9,6 +9,7 @@
 
 #include "glib.h"
 #include "raylib.h"
+#include "raymath.h"
 
 #define DEFAULT_SCREEN_W 800
 #define DEFAULT_SCREEN_H 600

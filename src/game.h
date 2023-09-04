@@ -7,17 +7,19 @@
 // TODO unify these into a single type
 typedef struct {
     Vector2 pos;
+    int speed; // 3
     int health;
 } Player;
 
 typedef struct {
     Vector2 pos;
-    Vector2 speed;
+    Vector2 speed; // 2
 } Enemy;
 
 typedef struct {
     Vector2 pos;
-    Vector2 speed;
+    Vector2 speed; // 10
+    int lifetime; // decrements every frame
 } Bullet;
 
 // timer class
@@ -37,6 +39,8 @@ typedef struct {
     Camera2D    camera;
     Player      player;
 
+    GPtrArray*  enemies;    // <Enemy*>
+    GPtrArray*  bullets;    // <Bullet*>
     GPtrArray*  timers;     // <Timer*>
 
     GHashTable* textures;   // <cchar*, Texture2D*>
@@ -61,9 +65,19 @@ void        DrawPlayer();
 void        DrawUI();
 void        DrawHealthBar();
 
-void        CreateTimer(double interval, int num_triggers, TimerCallback fn);
-void        CheckTimers();
-bool        CheckTimer(Timer* t);
+void        CreateEnemy(Vector2 pos, Vector2 speed);
+void        UpdateEnemies();
+void        UpdateEnemy(Enemy* e);
+void        DrawEnemy(Enemy* e);
+
+void        CreateBullet(Vector2 pos, Vector2 speed);
+void        UpdateBullets();
+void        UpdateBullet(Bullet* b);
+void        DrawBullet(Bullet* b);
+
+void        CreateTimer(TimerCallback fn, double interval, int num_triggers);
+void        UpdateTimers();
+bool        UpdateTimer(Timer* t);
 
 // asset handling
 void        UnloadAssets();
@@ -80,5 +94,6 @@ void        DeleteFont(char* name);
 void        FreeTextureCallback(void* texture);
 void        FreeFontCallback(void* font);
 void        DefaultTimerCallback();
+void        PlayerShootAtMouseCallback();
 
 #endif // GAME_H
