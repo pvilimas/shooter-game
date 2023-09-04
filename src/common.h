@@ -11,4 +11,3 @@
 #define DEFAULT_SCREEN_W 1920
 #define DEFAULT_SCREEN_H 1080
 #define WINDOW_TITLE "Shooter Game"
-
