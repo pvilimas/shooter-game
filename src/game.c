@@ -110,10 +110,10 @@ void HandleInput() {
 
 void TileBackground() {
     Texture2D bg_texture = *GetTexture("background");
-    int i0 = ((game.player.pos.x - game.screen_size.x/2) / bg_texture.width) - 1;
-    int i1 = ((game.player.pos.x + game.screen_size.x/2) / bg_texture.width) + 1;
-    int j0 = ((game.player.pos.y - game.screen_size.y/2) / bg_texture.height) - 1;
-    int j1 = ((game.player.pos.y + game.screen_size.y/2) / bg_texture.height) + 1;
+    int i0 = ((game.player.pos.x - game.screen_size.x/2) / bg_texture.width) - 2;
+    int i1 = ((game.player.pos.x + game.screen_size.x/2) / bg_texture.width) + 2;
+    int j0 = ((game.player.pos.y - game.screen_size.y/2) / bg_texture.height) - 2;
+    int j1 = ((game.player.pos.y + game.screen_size.y/2) / bg_texture.height) + 2;
 
     ClearBackground(RAYWHITE);
     for (int i = i0; i < i1; i++) {
@@ -201,6 +201,7 @@ void CreateTimer(TimerCallback fn, double interval, int num_triggers) {
         .fn = fn,
         .last_recorded = GetTime()
     };
+    g_ptr_array_add(game.timers, t);
 }
 
 void UpdateTimers() {
@@ -217,7 +218,8 @@ bool UpdateTimer(Timer* t) {
     if (now - t->last_recorded < t->interval) {
         return false;
     }
-    
+
+    t->last_recorded = now;
     t->fn();
 
     if (--t->num_triggers == 0) {
@@ -258,6 +260,10 @@ Font* GetFont(char* name) {
 
 void DeleteFont(char* name) {
     g_hash_table_remove(game.fonts, name);
+}
+
+void TestCallback() {
+    printf("test\n");
 }
 
 void FreeTextureCallback(void* texture) {

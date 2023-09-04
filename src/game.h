@@ -92,6 +92,7 @@ Font*       GetFont(char* name);
 void        DeleteFont(char* name);
 
 // callbacks
+void        TestCallback();
 void        FreeTextureCallback(void* texture);
 void        FreeFontCallback(void* font);
 void        DefaultTimerCallback();
