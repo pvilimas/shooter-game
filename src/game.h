@@ -32,6 +32,7 @@ typedef struct {
 // timer class
 typedef void (*TimerCallback)();
 
+// TODO fix num_triggers
 typedef struct {
     double interval;
     int num_triggers; // -1 = inf

@@ -19,6 +19,7 @@ void Config() {
     SetTargetFPS(60);
 }
 
+// set up the game
 void Init() {
     game.screen_size = (Vector2) {
         DEFAULT_SCREEN_W,
@@ -49,7 +50,7 @@ void Init() {
     game.frame_count = 0;
 
     CreateTexture("background", "assets/bg.png");
-    CreateTimer(PlayerShootAtMouseCallback, 1.0, 5);
+    CreateTimer(PlayerShootAtMouseCallback, 2.0, 5);
     CreateTimer(SpawnEnemyCallback, 0.1, -1);
 }
 
@@ -116,7 +117,7 @@ int RandInt(int min, int max) {
 }
 
 float RandFloat(float min, float max) {
-    return min + (float)rand() / ((float)(RAND_MAX/(max-min)));
+    return min + (float)rand() / ((float)(RAND_MAX / (max-min)));
 }
 
 // Handle all key input and move the player
@@ -262,7 +263,7 @@ void SpawnEnemy(Vector2 pos, float angle, int speed) {
 
 void SpawnBullet(Vector2 pos, float angle, int speed) {
     Bullet* b = malloc(sizeof(Bullet));
-    *b = (Bullet){pos, angle, speed, 60, 1, 10};
+    *b = (Bullet){pos, angle, speed, 30, 1, 10};
     g_ptr_array_add(game.bullets, b);
 }
 
