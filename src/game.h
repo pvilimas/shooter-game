@@ -40,6 +40,12 @@ typedef struct {
     double last_recorded;
 } Timer;
 
+typedef enum {
+    SCENE_STARTSCREEN,
+    SCENE_GAMEPLAY,
+    SCENE_ENDSCREEN
+} Scene;
+
 // the game class
 typedef struct {
     Vector2     screen_size;
@@ -53,6 +59,7 @@ typedef struct {
     GHashTable* textures;       // <cchar*, Texture2D*>
     GHashTable* fonts;          // <cchar*, Font*>
 
+    Scene       current_scene;
     int         frame_count;    // increment every frame
 } Game;
 
@@ -75,6 +82,8 @@ int         RandInt(int min, int max);
 float       RandFloat(float min, float max);
 
 // game functions
+void        LoadScene(Scene new_scene);
+
 void        HandleInput();
 
 void        TileBackground();

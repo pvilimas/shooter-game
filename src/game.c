@@ -47,6 +47,7 @@ void Init() {
     game.fonts = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, FreeFontCallback);
 
+    game.current_scene = SCENE_GAMEPLAY;
     game.frame_count = 0;
 
     CreateTexture("background", "assets/bg.png");
@@ -118,6 +119,21 @@ int RandInt(int min, int max) {
 
 float RandFloat(float min, float max) {
     return min + (float)rand() / ((float)(RAND_MAX / (max-min)));
+}
+
+// contains initialization logic for each scene
+void LoadScene(Scene new_scene) {
+    if (game.current_scene == SCENE_STARTSCREEN && new_scene == SCENE_GAMEPLAY) {
+
+    } else if (game.current_scene == SCENE_GAMEPLAY && new_scene == SCENE_ENDSCREEN) {
+
+    } else if (game.current_scene == SCENE_ENDSCREEN && new_scene == SCENE_GAMEPLAY) {
+
+    } else {
+        printf("Invalid scene transition, exiting\n");
+        Quit();
+    }
+    game.current_scene = new_scene;
 }
 
 // Handle all key input and move the player
