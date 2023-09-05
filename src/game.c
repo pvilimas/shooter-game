@@ -1,5 +1,8 @@
 #include "game.h"
 
+// global instance
+Game game;
+
 // raylib configuration and system setup functions
 void Config() {
     srand(time(NULL));

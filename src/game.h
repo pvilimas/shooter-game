@@ -1,7 +1,19 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "common.h"
+#include <assert.h>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+#include "glib.h"
+#include "raylib.h"
+#include "raymath.h"
+
+#define DEFAULT_SCREEN_W 1920
+#define DEFAULT_SCREEN_H 1080
+#define WINDOW_TITLE "Shooter Game"
 
 #define DEBUGGING 1
 
@@ -67,7 +79,7 @@ typedef struct _game {
 } Game;
 
 // global instance of the game
-static Game game;
+extern Game game;
 
 // main functions
 void        Config();
