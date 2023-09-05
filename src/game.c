@@ -51,7 +51,7 @@ void Init() {
     game.frame_count = 0;
 
     CreateTexture("background", "assets/bg.png");
-    CreateTimer(PlayerShootAtMouseCallback, 2.0, 5);
+    CreateTimer(PlayerShootAtMouseCallback, 2.0, -1);
     CreateTimer(SpawnEnemyCallback, 0.1, -1);
 }
 
@@ -287,7 +287,7 @@ void CreateTimer(TimerCallback fn, double interval, int num_triggers) {
     Timer* t = malloc(sizeof(Timer));
     *t = (Timer) {
         .interval = interval,
-        .num_triggers = num_triggers == 0,
+        .num_triggers = num_triggers,
         .fn = fn,
         .last_recorded = GetTime()
     };

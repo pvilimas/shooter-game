@@ -20,3 +20,5 @@
 2	82	1693937000311938859	CMakeFiles/shooter-game.dir/src/main.c.o	7ede37ca123fa364
 1	108	1693937000339936854	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc
 108	152	1693937000379933991	shooter-game	fc2bd11d5d0a7a1a
+0	93	1693937285134421904	CMakeFiles/shooter-game.dir/src/game.c.o	21f7dc2df02991cc
+93	120	1693937285162421338	shooter-game	fc2bd11d5d0a7a1a
