@@ -9,7 +9,7 @@ void Config() {
 
     SetTraceLogLevel(LOG_WARNING);
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
-    InitWindow(DEFAULT_SCREEN_W, DEFAULT_SCREEN_H, WINDOW_TITLE);
+    InitWindow(GetScreenWidth(), GetScreenHeight(), WINDOW_TITLE);
     ToggleFullscreen();
 
     // disable exit key when not debugging
@@ -22,8 +22,8 @@ void Config() {
 // set up the game
 void Init() {
     game.screen_size = (Vector2) {
-        DEFAULT_SCREEN_W,
-        DEFAULT_SCREEN_H
+        GetScreenWidth(),
+        GetScreenHeight()
     };
     game.player = (Player) {
         .pos = { 0, 0 },
