@@ -62,20 +62,20 @@ typedef enum {
 // game has limited # of object slots
 // each object has 1 method: update (called once per frame)
 
-// typedef enum {
-//     OBJ_ENTITY,     // any in-game entity like player, bullet, enemy
-//     OBJ_UI,         // any ui element - buttons, text
-//     OBJ_TIMER       // timer object
-// } ObjectType;
+typedef enum {
+    OBJ_ENTITY,     // any in-game entity like player, bullet, enemy
+    OBJ_UI,         // any ui element - buttons, text
+    OBJ_TIMER       // timer object
+} ObjectType;
 
-// typedef void (*ObjCallback)(struct _object*);
+typedef void (*ObjCallback)(struct _object*);
 
-// typedef struct _object {
-//     ObjectType type;
-//     ObjCallback update;
-// } Object;
+typedef struct _object {
+    ObjectType type;
+    ObjCallback update;
+} Object;
 
-// #define OBJECT_SLOTS 10000
+#define OBJECT_SLOTS 10000
 
 // the game class
 typedef struct _game {

@@ -1,6 +1,16 @@
 [
 {
   "directory": "/home/paul/Programming/Games/shooter-game/build",
+  "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/assets.c.o -c /home/paul/Programming/Games/shooter-game/src/assets.c",
+  "file": "/home/paul/Programming/Games/shooter-game/src/assets.c"
+},
+{
+  "directory": "/home/paul/Programming/Games/shooter-game/build",
+  "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/callbacks.c.o -c /home/paul/Programming/Games/shooter-game/src/callbacks.c",
+  "file": "/home/paul/Programming/Games/shooter-game/src/callbacks.c"
+},
+{
+  "directory": "/home/paul/Programming/Games/shooter-game/build",
   "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/game.c.o -c /home/paul/Programming/Games/shooter-game/src/game.c",
   "file": "/home/paul/Programming/Games/shooter-game/src/game.c"
 },
@@ -8,5 +18,15 @@
   "directory": "/home/paul/Programming/Games/shooter-game/build",
   "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/main.c.o -c /home/paul/Programming/Games/shooter-game/src/main.c",
   "file": "/home/paul/Programming/Games/shooter-game/src/main.c"
+},
+{
+  "directory": "/home/paul/Programming/Games/shooter-game/build",
+  "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/scene.c.o -c /home/paul/Programming/Games/shooter-game/src/scene.c",
+  "file": "/home/paul/Programming/Games/shooter-game/src/scene.c"
+},
+{
+  "directory": "/home/paul/Programming/Games/shooter-game/build",
+  "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/utils.c.o -c /home/paul/Programming/Games/shooter-game/src/utils.c",
+  "file": "/home/paul/Programming/Games/shooter-game/src/utils.c"
 }
 ]

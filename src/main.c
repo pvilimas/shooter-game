@@ -1,5 +1,8 @@
 #include "game.h"
 
+// global instance
+Game game;
+
 int main() {
     Config();
     Init();

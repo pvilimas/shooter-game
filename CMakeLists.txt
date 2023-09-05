@@ -8,8 +8,12 @@ pkg_check_modules(GLIB REQUIRED glib-2.0)
 pkg_check_modules(RAYLIB REQUIRED raylib)
 
 add_executable(${PROJECT_NAME}
+    src/assets.c
+    src/callbacks.c
     src/game.c
     src/main.c
+    src/scene.c
+    src/utils.c
 )
 
 # glib
