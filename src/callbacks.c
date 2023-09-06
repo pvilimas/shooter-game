@@ -14,17 +14,16 @@ void FreeFontCallback(void* font) {
     free(font);
 }
 
-void DefaultTimerCallback() {
-   
-}
-
 void PlayerShootAtMouseCallback() {
     Vector2 abs_mouse_pos = GetAbsMousePosition();
     int dx = abs_mouse_pos.x - game.player->data.ent_data.pos.x;
     int dy = abs_mouse_pos.y - game.player->data.ent_data.pos.y;
     double angle = atan2(dy, dx);
+
     for (int i = 0; i < 5; i++) {
-        SpawnBullet(game.player->data.ent_data.pos, RandFloat(angle - 0.125, angle + 0.125), 10);
+        Object* o = CreateObject(OBJ_ENTITY_BULLET);
+        o->data.ent_data.pos = game.player->data.ent_data.pos;
+        o->data.ent_data.angle = RandFloat(angle - 0.125, angle + 0.125);
     }
 }
 
@@ -35,6 +34,8 @@ void SpawnEnemyCallback() {
         GetRandomValue(camera_offset.x - enemy_spawn_radius, camera_offset.x + enemy_spawn_radius),
         GetRandomValue(camera_offset.y - enemy_spawn_radius, camera_offset.y + enemy_spawn_radius)
     };
+
+    // repick until chosen point is offscreen by a certain radius
     while (PointNearScreen(pos, 10)) {
         pos = (Vector2){
             GetRandomValue(camera_offset.x - enemy_spawn_radius, camera_offset.x + enemy_spawn_radius),
@@ -44,7 +45,10 @@ void SpawnEnemyCallback() {
     int dx = game.player->data.ent_data.pos.x - pos.x;
     int dy = game.player->data.ent_data.pos.y - pos.y;
     double angle = atan2(dy, dx);
-    SpawnEnemy(pos, angle, 1);
+    
+    Object* o = CreateObject(OBJ_ENTITY_ENEMY);
+    o->data.ent_data.pos = pos;
+    o->data.ent_data.angle = angle;
 }
 
 // OBJ_TIMER
@@ -121,6 +125,9 @@ void ObjUpdateEnemyCallback(void* obj) {
     // check collision between enemy and bullet
     for (int j = 0; j < OBJ_SLOT_COUNT; j++) {
         Object* b = GetObject(OBJ_ENTITY_BULLET, j);
+        if (!b->active) {
+            continue;
+        }
 
         if (Vector2Distance(o->data.ent_data.pos, b->data.ent_data.pos) > 50) {
             continue;
@@ -174,3 +181,18 @@ void ObjRenderBulletCallback(void* obj) {
         (Vector2){o->data.ent_data.pos.x + c * 4, o->data.ent_data.pos.y + s * 4},
         3.0f, WHITE);
 }
+
+// OBJ_UI_HEALTHBAR
+
+void ObjRenderHealthbarCallback(void* obj) {
+    Object* o = (Object*) obj;
+    Vector2 abs_pos = GetAbsPosition(o->data.ui_data.pos);
+
+    for (int i = 0; i < game.player->data.ent_data.max_health / 20; i++) {
+        DrawRectangleRec((Rectangle){abs_pos.x + (40*i), abs_pos.y, 43, 15}, BLACK);
+    }
+    for (int i = 0; i < game.player->data.ent_data.health / 20; i++) {
+        DrawRectangleRec((Rectangle){abs_pos.x + 3 + (40*i), abs_pos.y + 3, 37, 9}, (Color){255, 0, 0, 255});
+    }
+}
+

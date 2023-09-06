@@ -12,9 +12,14 @@ Vector2 GetCameraOffset() {
     };
 }
 
+// absolute position on screen - used for drawing static ui elements
+Vector2 GetAbsPosition(Vector2 p) {
+    return Vector2Add(p, GetCameraOffset());
+}
+
 // absolute mouse position, accounting for camera offset
 Vector2 GetAbsMousePosition() {
-    return Vector2Add(GetMousePosition(), GetCameraOffset());
+    return GetAbsPosition(GetMousePosition());
 }
 
 // returns true if p is onscreen

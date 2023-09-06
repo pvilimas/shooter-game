@@ -11,10 +11,6 @@ void        Quit();
 
 // game functions
 void        TileBackground();
-void        DrawUI();
-
-void        SpawnEnemy(Vector2 pos, float angle, int speed);
-void        SpawnBullet(Vector2 pos, float angle, int speed);
 
 // scene.c
 void        LoadScene(Scene new_scene);
@@ -24,11 +20,13 @@ void        DrawSceneEndScreen();
 
 // utils.c
 Vector2     GetCameraOffset();
+Vector2     GetAbsPosition(Vector2 p);
 Vector2     GetAbsMousePosition();
 bool        PointOnScreen(Vector2 p);
 bool        PointNearScreen(Vector2 p, float range);
 int         RandInt(int min, int max);
 float       RandFloat(float min, float max);
+
 // TODO
 void        CheckCollisions();
 
@@ -50,18 +48,22 @@ void        DeleteFont(char* name);
 
 // callbacks.c
 void        TestCallback();
+
 void        FreeTextureCallback(void* texture);
 void        FreeFontCallback(void* font);
-void        DefaultTimerCallback();
+
 void        PlayerShootAtMouseCallback();
 void        SpawnEnemyCallback();
 
 void        ObjUpdateTimerCallback(void* obj);
+
 void        ObjUpdatePlayerCallback(void* obj);
 void        ObjRenderPlayerCallback(void* obj);
 void        ObjUpdateEnemyCallback(void* obj);
 void        ObjRenderEnemyCallback(void* obj);
 void        ObjUpdateBulletCallback(void* obj);
 void        ObjRenderBulletCallback(void* obj);
+
+void        ObjRenderHealthbarCallback(void* obj);
 
 #endif // GAME_H

@@ -63,6 +63,8 @@ typedef struct {
 // data that all ui elements have
 typedef struct {
     Vector2 pos;
+    Vector2 size;
+    char label[100];
 } UIObjData;
 
 typedef void (*TimerCallback)();

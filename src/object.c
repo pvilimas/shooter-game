@@ -94,6 +94,14 @@ Object* CreateObject(ObjType type) {
             .lifetime = 30
         };
         break;
+    case OBJ_UI_HEALTHBAR:
+        o.update = NULL;
+        o.render = ObjRenderHealthbarCallback;
+        o.data.ui_data = (UIObjData) {
+            .pos = {20, 20},
+            .size = {200, 43}
+        };
+        break;
     }
 
     // insert into first available slot

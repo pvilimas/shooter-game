@@ -26,7 +26,6 @@ void DrawSceneGameplay() {
 
         /* static ui elements get drawn here */
 
-        DrawUI();
     EndDrawing();
     game.frame_count++;
 }

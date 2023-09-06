@@ -49,15 +49,20 @@ void Init() {
 
     CreateTexture("background", "assets/bg.png");
 
-    Object* timer = CreateObject(OBJ_TIMER);
-    timer->data.tm_data.callback = PlayerShootAtMouseCallback;
-    timer->data.tm_data.interval = 2.0;
-    timer->data.tm_data.num_triggers = -1;
+    // timer: shoot basic bullets
+    Object* o = CreateObject(OBJ_TIMER);
+    o->data.tm_data.callback = PlayerShootAtMouseCallback;
+    o->data.tm_data.interval = 2.0;
+    o->data.tm_data.num_triggers = -1;
 
-    timer = CreateObject(OBJ_TIMER);
-    timer->data.tm_data.callback = SpawnEnemyCallback;
-    timer->data.tm_data.interval = 0.1;
-    timer->data.tm_data.num_triggers = -1;
+    // timer: spawn normal enemies
+    o = CreateObject(OBJ_TIMER);
+    o->data.tm_data.callback = SpawnEnemyCallback;
+    o->data.tm_data.interval = 0.1;
+    o->data.tm_data.num_triggers = -1;
+
+    // player healthbar
+    CreateObject(OBJ_UI_HEALTHBAR);
 }
 
 // one iteration of the game loop
@@ -95,26 +100,4 @@ void TileBackground() {
             );
         }
     }
-}
-
-void DrawUI() {
-    // player health bar
-    for (int i = 0; i < game.player->data.ent_data.max_health / 20; i++) {
-        DrawRectangleRec((Rectangle){20+(40*i), 20, 43, 15}, BLACK);
-    }
-    for (int i = 0; i < game.player->data.ent_data.health / 20; i++) {
-        DrawRectangleRec((Rectangle){23+(40*i), 23, 37, 9}, (Color){255, 0, 0, 255});
-    }
-}
-
-void SpawnEnemy(Vector2 pos, float angle, int speed) {
-    Object* o = CreateObject(OBJ_ENTITY_ENEMY);
-    o->data.ent_data.pos = pos;
-    o->data.ent_data.angle = angle;
-}
-
-void SpawnBullet(Vector2 pos, float angle, int speed) {
-    Object* o = CreateObject(OBJ_ENTITY_BULLET);
-    o->data.ent_data.pos = pos;
-    o->data.ent_data.angle = angle;
 }
