@@ -47,6 +47,8 @@ void SpawnEnemyCallback() {
     SpawnEnemy(pos, angle, 1);
 }
 
+// OBJ_TIMER
+
 void ObjUpdateTimerCallback(void* obj) {
     double now = GetTime();
     Object* timer = (Object*) obj;
@@ -66,6 +68,8 @@ void ObjUpdateTimerCallback(void* obj) {
         DeleteObject(OBJ_TIMER, timer->id);
     }
 }
+
+// OBJ_ENTITY_PLAYER
 
 void ObjUpdatePlayerCallback(void* obj) {
     if (IsKeyDown(KEY_W)) {
@@ -91,6 +95,8 @@ void ObjRenderPlayerCallback(void* obj) {
         DrawCircle(game.player->data.ent_data.pos.x, game.player->data.ent_data.pos.y, 5.0f, BLACK);
     }
 }
+
+// OBJ_ENTITY_ENEMY
 
 void ObjUpdateEnemyCallback(void* obj) {
     Object* o = (Object*) obj;
@@ -139,6 +145,8 @@ void ObjRenderEnemyCallback(void* obj) {
     DrawCircle(o->data.ent_data.pos.x, o->data.ent_data.pos.y, 25, BLACK);
     DrawCircle(o->data.ent_data.pos.x, o->data.ent_data.pos.y, 22, RED);
 }
+
+// OBJ_ENTITY_BULLET
 
 void ObjUpdateBulletCallback(void* obj) {
     Object* o = (Object*) obj;
