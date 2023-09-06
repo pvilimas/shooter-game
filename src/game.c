@@ -24,8 +24,8 @@ void Init() {
     };
 
     // game.objects = {};
-    for (int type = 0; type < OBJ_COUNT; type++) {
-        for (int id = 0; id < OBJECT_SLOTS; id++) {
+    for (int type = 0; type < OBJ_TYPE_COUNT; type++) {
+        for (int id = 0; id < OBJ_SLOT_COUNT; id++) {
             game.objects[type][id].active = false;
         }
     }
@@ -39,8 +39,6 @@ void Init() {
         .zoom = 1.0f
     };
 
-    game.timers = g_ptr_array_new();
-
     game.textures = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, FreeTextureCallback);
     game.fonts = g_hash_table_new_full(g_str_hash, g_str_equal,
@@ -52,12 +50,12 @@ void Init() {
     CreateTexture("background", "assets/bg.png");
 
     Object* timer = CreateObject(OBJ_TIMER);
-    timer->data.tm_data.fn = PlayerShootAtMouseCallback;
+    timer->data.tm_data.callback = PlayerShootAtMouseCallback;
     timer->data.tm_data.interval = 2.0;
     timer->data.tm_data.num_triggers = -1;
 
     timer = CreateObject(OBJ_TIMER);
-    timer->data.tm_data.fn = SpawnEnemyCallback;
+    timer->data.tm_data.callback = SpawnEnemyCallback;
     timer->data.tm_data.interval = 0.1;
     timer->data.tm_data.num_triggers = -1;
 }

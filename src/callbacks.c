@@ -56,7 +56,7 @@ void ObjUpdateTimerCallback(void* obj) {
     }
 
     timer->data.tm_data.last_recorded = now;
-    timer->data.tm_data.fn();
+    timer->data.tm_data.callback();
 
     if (timer->data.tm_data.num_triggers > -1) {
         timer->data.tm_data.num_triggers--;
@@ -113,7 +113,7 @@ void ObjUpdateEnemyCallback(void* obj) {
     }
 
     // check collision between enemy and bullet
-    for (int j = 0; j < OBJECT_SLOTS; j++) {
+    for (int j = 0; j < OBJ_SLOT_COUNT; j++) {
         Object* b = GetObject(OBJ_ENTITY_BULLET, j);
 
         if (Vector2Distance(o->data.ent_data.pos, b->data.ent_data.pos) > 50) {

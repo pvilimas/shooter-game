@@ -12,7 +12,6 @@
 #include "raymath.h"
 
 #define WINDOW_TITLE "Shooter Game"
-#define OBJECT_SLOTS 1000
 
 #define DEBUG printf("\t%s: %d\n", __FILE__, __LINE__)
 
@@ -24,22 +23,11 @@ typedef enum {
     SCENE_ENDSCREEN
 } Scene;
 
-// typedef struct {
-//     int speed;          // how much it moves by each frame
-//     float angle;        // direction of travel  
-//     int max_health;
-//     int damage;         // how much damage it does (to the player or enemies)
-//     int iframes;        // # invincibility frames, counts down each frame
-//     int lifetime;       // # frames it lasts, counts down each frame
-//     int hitbox_radius;  // radius of circular hitbox
-// } EntityDefaults;
-
-// defaults/initial settings for each entity type
-// extern EntityDefaults entity_defaults[ENT_COUNT];
-
 // object - any game element
 // game has limited # of object slots
 // each object has 2 methods: update and render (each called once per frame)
+
+#define OBJ_SLOT_COUNT 1000
 
 typedef enum {
     OBJ_TIMER,
@@ -50,8 +38,9 @@ typedef enum {
     
     OBJ_UI_BUTTON,
     OBJ_UI_TEXT,
+    OBJ_UI_HEALTHBAR,
 
-    OBJ_COUNT
+    OBJ_TYPE_COUNT
 } ObjType;
 
 // the type of object.update and object.render
@@ -82,7 +71,7 @@ typedef void (*TimerCallback)();
 typedef struct {
     double          interval;
     int             num_triggers; // -1 = inf
-    TimerCallback   fn;
+    TimerCallback   callback;
     double          last_recorded;
 } TimerObjData;
 
@@ -108,15 +97,13 @@ typedef struct {
     Camera2D    camera;
     Object*     player;
 
-    GPtrArray*  timers;                 // <Timer*>
+    Scene       current_scene;
+    int         frame_count;            // increment every frame
 
     GHashTable* textures;               // <cchar*, Texture2D*>
     GHashTable* fonts;                  // <cchar*, Font*>
 
-    Scene       current_scene;
-    int         frame_count;            // increment every frame
-
-    Object      objects[OBJ_COUNT][OBJECT_SLOTS];
+    Object      objects[OBJ_TYPE_COUNT][OBJ_SLOT_COUNT];
 } Game;
 
 // global instance of the game
