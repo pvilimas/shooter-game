@@ -36,8 +36,8 @@ typedef enum {
     OBJ_ENTITY_ENEMY,
     OBJ_ENTITY_BULLET,
     
-    OBJ_UI_BUTTON,
     OBJ_UI_TEXT,
+    OBJ_UI_BUTTON,
     OBJ_UI_HEALTHBAR,
 
     OBJ_TYPE_COUNT
