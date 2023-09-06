@@ -12,7 +12,7 @@ void DrawSceneGameplay() {
     UpdateTimers();
 
     // update camera target to player
-    game.camera.target = game.player.pos;
+    game.camera.target = game.player->data.ent_data.pos;
 
     BeginDrawing();
         BeginMode2D(game.camera);

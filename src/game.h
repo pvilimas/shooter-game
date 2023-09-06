@@ -38,6 +38,11 @@ float       RandFloat(float min, float max);
 // TODO
 void        CheckCollisions();
 
+Object*     CreateObject(ObjType type);
+void        UpdateObjects();
+void        RenderObjects();
+void        DeleteObjects();
+
 void        CreateTimer(TimerCallback fn, double interval, int num_triggers);
 bool        UpdateTimer(Timer* t);
 void        UpdateTimers();
@@ -58,5 +63,7 @@ void        FreeFontCallback(void* font);
 void        DefaultTimerCallback();
 void        PlayerShootAtMouseCallback();
 void        SpawnEnemyCallback();
+void        ObjUpdatePlayerCallback(void* obj);
+void        ObjRenderPlayerCallback(void* obj);
 
 #endif // GAME_H

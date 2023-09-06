@@ -39,6 +39,67 @@ float RandFloat(float min, float max) {
     return min + (float)rand() / ((float)(RAND_MAX / (max-min)));
 }
 
+Object* CreateObject(ObjType type) {
+    Object o;
+    switch(type) {
+    case OBJ_ENTITY_PLAYER:
+        o = (Object){
+            .type = OBJ_ENTITY_PLAYER,
+            .update = ObjUpdatePlayerCallback,
+            .render = ObjRenderPlayerCallback,
+            .data = (ObjData) {
+                .ent_data = {
+                    .speed = 2,
+                    .max_health = 100,
+                    .health = 100,
+                    .damage = 0,
+                    .hitbox_radius = 5
+                }
+            }
+        };
+        break;
+    }
+    g_array_append_val(game.objects[type], o);
+    return (Object*) &game.objects[type][game.objects[type]->len - 1];
+}
+
+void UpdateObjects() {
+    for (int type = 0; type < OBJ_COUNT; type++) {
+        for (int i = 0; i < game.objects[type]->len; i++) {
+            Object* o = (Object*) game.objects[type]->data[i];
+
+            // skip if update = NULL
+            if (!o->update) {
+                continue;
+            }
+
+            // pass ptr so it can modify itself
+            o->update(o);
+        }
+    }
+}
+
+void RenderObjects() {
+    for (int type = 0; type < OBJ_COUNT; type++) {
+        for (int i = 0; i < game.objects[type]->len; i++) {
+            Object* o = (Object*) game.objects[type]->data[i];
+
+            // skip if render = NULL
+            if (!o->render) {
+                continue;
+            }
+
+            // pass ptr so it can access itself
+            o->render(o);
+        }
+    }
+}
+
+void DeleteObjects() {
+    for (int type = 0; type < OBJ_COUNT; type++) {
+        g_array_unref(game.objects[type]);
+    }
+}
 
 void CreateTimer(TimerCallback fn, double interval, int num_triggers) {
     Timer* t = malloc(sizeof(Timer));
@@ -60,15 +121,12 @@ bool UpdateTimer(Timer* t) {
 
     t->last_recorded = now;
     t->fn();
+
     if (t->num_triggers > -1) {
         t->num_triggers--;
     }
 
-    if (!t->num_triggers) {
-        return true;
-    }
-
-    return false;
+    return t->num_triggers == 0;
 }
 
 void UpdateTimers() {

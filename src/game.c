@@ -22,14 +22,15 @@ void Init() {
         GetScreenWidth(),
         GetScreenHeight()
     };
-    game.player = (Player) {
-        .pos = { 0, 0 },
-        .health = 5,
-        .iframes = 0,
-        .hitbox_radius = 5
-    };
+
+    for (int i = 0; i < OBJ_COUNT; i++) {
+        game.objects[i] = g_array_sized_new(false, false, sizeof(Object), OBJECT_SLOTS);
+    }
+
+    game.player = CreateObject(OBJ_ENTITY_PLAYER);
+
     game.camera = (Camera2D) {
-        .target = game.player.pos, /* target follows player */
+        .target = game.player->data.ent_data.pos, /* target follows player */
         .offset = { game.screen_size.x / 2, game.screen_size.y / 2 },
         .rotation = 0.0f,
         .zoom = 1.0f
@@ -74,25 +75,25 @@ void HandleInput() {
     // TODO add sequential key presses, so like if W is pressed 
     // and then S, character continues moving up
     if (IsKeyDown(KEY_W)) {
-        game.player.pos.y -= 5;
+        game.player->data.ent_data.pos.y -= 5;
     }
     if (IsKeyDown(KEY_A)) {
-        game.player.pos.x -= 5;
+        game.player->data.ent_data.pos.x -= 5;
     }
     if (IsKeyDown(KEY_S)) {
-        game.player.pos.y += 5;
+        game.player->data.ent_data.pos.y += 5;
     }
     if (IsKeyDown(KEY_D)) {
-        game.player.pos.x += 5;
+        game.player->data.ent_data.pos.x += 5;
     }
 }
 
 void TileBackground() {
     Texture2D bg_texture = *GetTexture("background");
-    int i0 = ((game.player.pos.x - game.screen_size.x/2) / bg_texture.width) - 5;
-    int i1 = ((game.player.pos.x + game.screen_size.x/2) / bg_texture.width) + 5;
-    int j0 = ((game.player.pos.y - game.screen_size.y/2) / bg_texture.height) - 5;
-    int j1 = ((game.player.pos.y + game.screen_size.y/2) / bg_texture.height) + 5;
+    int i0 = ((game.player->data.ent_data.pos.x - game.screen_size.x/2) / bg_texture.width) - 5;
+    int i1 = ((game.player->data.ent_data.pos.x + game.screen_size.x/2) / bg_texture.width) + 5;
+    int j0 = ((game.player->data.ent_data.pos.y - game.screen_size.y/2) / bg_texture.height) - 5;
+    int j1 = ((game.player->data.ent_data.pos.y + game.screen_size.y/2) / bg_texture.height) + 5;
 
     ClearBackground(RAYWHITE);
     for (int i = i0; i < i1; i++) {
@@ -112,7 +113,7 @@ void DrawUI() {
     for (int i = 0; i < 5; i++) {
         DrawRectangleRec((Rectangle){20+(40*i), 20, 43, 15}, BLACK);
     }
-    for (int i = 0; i < game.player.health; i++) {
+    for (int i = 0; i < game.player->data.ent_data.health; i++) {
         DrawRectangleRec((Rectangle){23+(40*i), 23, 37, 9}, (Color){255, 0, 0, 255});
     }
 }
@@ -120,13 +121,13 @@ void DrawUI() {
 void RenderPlayer() {
     // update
     HandleInput();
-    if (game.player.iframes != 0) {
-        game.player.iframes--;
+    if (game.player->data.ent_data.iframes != 0) {
+        game.player->data.ent_data.iframes--;
     }
 
     // draw
-    if (game.player.iframes % 20 < 10) {
-        DrawCircle(game.player.pos.x, game.player.pos.y, 5.0f, BLACK);
+    if (game.player->data.ent_data.iframes % 20 < 10) {
+        DrawCircle(game.player->data.ent_data.pos.x, game.player->data.ent_data.pos.y, 5.0f, BLACK);
     }
 }
 
@@ -137,20 +138,20 @@ void RenderEnemies() {
 
         // update
         // track player
-        int dx = game.player.pos.x - e->pos.x;
-        int dy = game.player.pos.y - e->pos.y;
+        int dx = game.player->data.ent_data.pos.x - e->pos.x;
+        int dy = game.player->data.ent_data.pos.y - e->pos.y;
         e->angle = atan2(dy, dx);
 
         e->pos.x += cos(e->angle) * e->speed;
         e->pos.y += sin(e->angle) * e->speed;
 
         // check collision between enemy and player
-        bool player_takes_dmg = !game.player.iframes && CheckCollisionCircles(
+        bool player_takes_dmg = !game.player->data.ent_data.iframes && CheckCollisionCircles(
             e->pos, e->hitbox_radius,
-            game.player.pos, game.player.hitbox_radius);
+            game.player->data.ent_data.pos, game.player->data.ent_data.hitbox_radius);
         if (player_takes_dmg) {
-            game.player.health--;
-            game.player.iframes = 120;
+            game.player->data.ent_data.health--;
+            game.player->data.ent_data.iframes = 120;
         }
 
         // check collision between enemy and bullet
