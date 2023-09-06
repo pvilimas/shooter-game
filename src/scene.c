@@ -9,20 +9,18 @@ void DrawSceneStartScreen() {
 }
 
 void DrawSceneGameplay() {
-    UpdateTimers();
 
     // update camera target to player
-    game.camera.target = game.player.pos;
+    game.camera.target = game.player->data.ent_data.pos;
 
     BeginDrawing();
         BeginMode2D(game.camera);
-            
+
             /* all in-game objects get drawn here */
             
             TileBackground();
-            RenderPlayer();
-            RenderEnemies();
-            RenderBullets();
+            UpdateObjects();
+            RenderObjects();
 
         EndMode2D();
 

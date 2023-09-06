@@ -12,6 +12,7 @@ add_executable(${PROJECT_NAME}
     src/callbacks.c
     src/game.c
     src/main.c
+    src/object.c
     src/scene.c
     src/utils.c
 )

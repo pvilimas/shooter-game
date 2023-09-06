@@ -22,22 +22,22 @@ void Init() {
         GetScreenWidth(),
         GetScreenHeight()
     };
-    game.player = (Player) {
-        .pos = { 0, 0 },
-        .health = 5,
-        .iframes = 0,
-        .hitbox_radius = 5
-    };
+
+    // game.objects = {};
+    for (int type = 0; type < OBJ_TYPE_COUNT; type++) {
+        for (int id = 0; id < OBJ_SLOT_COUNT; id++) {
+            game.objects[type][id].active = false;
+        }
+    }
+
+    game.player = CreateObject(OBJ_ENTITY_PLAYER);
+
     game.camera = (Camera2D) {
-        .target = game.player.pos, /* target follows player */
+        .target = game.player->data.ent_data.pos, /* target follows player */
         .offset = { game.screen_size.x / 2, game.screen_size.y / 2 },
         .rotation = 0.0f,
         .zoom = 1.0f
     };
-
-    game.timers = g_ptr_array_new();
-    game.enemies = g_ptr_array_new();
-    game.bullets = g_ptr_array_new();
 
     game.textures = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, FreeTextureCallback);
@@ -48,8 +48,16 @@ void Init() {
     game.frame_count = 0;
 
     CreateTexture("background", "assets/bg.png");
-    CreateTimer(PlayerShootAtMouseCallback, 2.0, -1);
-    CreateTimer(SpawnEnemyCallback, 0.1, -1);
+
+    Object* timer = CreateObject(OBJ_TIMER);
+    timer->data.tm_data.callback = PlayerShootAtMouseCallback;
+    timer->data.tm_data.interval = 2.0;
+    timer->data.tm_data.num_triggers = -1;
+
+    timer = CreateObject(OBJ_TIMER);
+    timer->data.tm_data.callback = SpawnEnemyCallback;
+    timer->data.tm_data.interval = 0.1;
+    timer->data.tm_data.num_triggers = -1;
 }
 
 // one iteration of the game loop
@@ -69,30 +77,12 @@ void Quit() {
     UnloadAssets();
 }
 
-// Handle all key input and move the player
-void HandleInput() {
-    // TODO add sequential key presses, so like if W is pressed 
-    // and then S, character continues moving up
-    if (IsKeyDown(KEY_W)) {
-        game.player.pos.y -= 5;
-    }
-    if (IsKeyDown(KEY_A)) {
-        game.player.pos.x -= 5;
-    }
-    if (IsKeyDown(KEY_S)) {
-        game.player.pos.y += 5;
-    }
-    if (IsKeyDown(KEY_D)) {
-        game.player.pos.x += 5;
-    }
-}
-
 void TileBackground() {
     Texture2D bg_texture = *GetTexture("background");
-    int i0 = ((game.player.pos.x - game.screen_size.x/2) / bg_texture.width) - 5;
-    int i1 = ((game.player.pos.x + game.screen_size.x/2) / bg_texture.width) + 5;
-    int j0 = ((game.player.pos.y - game.screen_size.y/2) / bg_texture.height) - 5;
-    int j1 = ((game.player.pos.y + game.screen_size.y/2) / bg_texture.height) + 5;
+    int i0 = ((game.player->data.ent_data.pos.x - game.screen_size.x/2) / bg_texture.width) - 5;
+    int i1 = ((game.player->data.ent_data.pos.x + game.screen_size.x/2) / bg_texture.width) + 5;
+    int j0 = ((game.player->data.ent_data.pos.y - game.screen_size.y/2) / bg_texture.height) - 5;
+    int j1 = ((game.player->data.ent_data.pos.y + game.screen_size.y/2) / bg_texture.height) + 5;
 
     ClearBackground(RAYWHITE);
     for (int i = i0; i < i1; i++) {
@@ -109,109 +99,22 @@ void TileBackground() {
 
 void DrawUI() {
     // player health bar
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < game.player->data.ent_data.max_health / 20; i++) {
         DrawRectangleRec((Rectangle){20+(40*i), 20, 43, 15}, BLACK);
     }
-    for (int i = 0; i < game.player.health; i++) {
+    for (int i = 0; i < game.player->data.ent_data.health / 20; i++) {
         DrawRectangleRec((Rectangle){23+(40*i), 23, 37, 9}, (Color){255, 0, 0, 255});
     }
 }
 
-void RenderPlayer() {
-    // update
-    HandleInput();
-    if (game.player.iframes != 0) {
-        game.player.iframes--;
-    }
-
-    // draw
-    if (game.player.iframes % 20 < 10) {
-        DrawCircle(game.player.pos.x, game.player.pos.y, 5.0f, BLACK);
-    }
-}
-
-void RenderEnemies() {
-    for (int i = 0; i < game.enemies->len; i++) {
-
-        Enemy* e = game.enemies->pdata[i];
-
-        // update
-        // track player
-        int dx = game.player.pos.x - e->pos.x;
-        int dy = game.player.pos.y - e->pos.y;
-        e->angle = atan2(dy, dx);
-
-        e->pos.x += cos(e->angle) * e->speed;
-        e->pos.y += sin(e->angle) * e->speed;
-
-        // check collision between enemy and player
-        bool player_takes_dmg = !game.player.iframes && CheckCollisionCircles(
-            e->pos, e->hitbox_radius,
-            game.player.pos, game.player.hitbox_radius);
-        if (player_takes_dmg) {
-            game.player.health--;
-            game.player.iframes = 120;
-        }
-
-        // check collision between enemy and bullet
-        for (int j = 0; j < game.bullets->len; j++) {
-            Bullet* b = game.bullets->pdata[j];
-            if (Vector2Distance(e->pos, b->pos) > 50) {
-                continue;
-            }
-            bool enemy_takes_dmg = CheckCollisionCircles(
-                e->pos, e->hitbox_radius,
-                b->pos, b->hitbox_radius);
-            if (enemy_takes_dmg) {
-                e->health--;
-                g_ptr_array_remove_index_fast(game.bullets, j);
-            }
-        }
-        
-        if (e->health <= 0) {
-            g_ptr_array_remove_index_fast(game.enemies, i);
-        }
-
-        // draw
-        DrawCircle(e->pos.x, e->pos.y, 25, BLACK);
-        DrawCircle(e->pos.x, e->pos.y, 22, RED);
-    }
-}
-
-void RenderBullets() {
-    for (int i = 0; i < game.bullets->len; i++) {
-
-        Bullet* b = game.bullets->pdata[i];
-
-        // update
-        b->pos.x += cos(b->angle) * b->speed;
-        b->pos.y += sin(b->angle) * b->speed;
-        b->lifetime--;
-
-        if (b->lifetime == 0) {
-            g_ptr_array_remove_index_fast(game.bullets, i);
-        }
-
-        // draw
-        DrawLineEx(
-            (Vector2){b->pos.x - cos(b->angle) * 5, b->pos.y - sin(b->angle) * 5},
-            (Vector2){b->pos.x + cos(b->angle) * 5, b->pos.y + sin(b->angle) * 5},
-            4.0f, BLACK);
-        DrawLineEx(
-            (Vector2){b->pos.x - cos(b->angle) * 4, b->pos.y - sin(b->angle) * 4},
-            (Vector2){b->pos.x + cos(b->angle) * 4, b->pos.y + sin(b->angle) * 4},
-            3.0f, WHITE);
-    }
-}
-
 void SpawnEnemy(Vector2 pos, float angle, int speed) {
-    Enemy* e = malloc(sizeof(Enemy));
-    *e = (Enemy){pos, angle, speed, 1, 25};
-    g_ptr_array_add(game.enemies, e);
+    Object* o = CreateObject(OBJ_ENTITY_ENEMY);
+    o->data.ent_data.pos = pos;
+    o->data.ent_data.angle = angle;
 }
 
 void SpawnBullet(Vector2 pos, float angle, int speed) {
-    Bullet* b = malloc(sizeof(Bullet));
-    *b = (Bullet){pos, angle, speed, 30, 1, 10};
-    g_ptr_array_add(game.bullets, b);
+    Object* o = CreateObject(OBJ_ENTITY_BULLET);
+    o->data.ent_data.pos = pos;
+    o->data.ent_data.angle = angle;
 }

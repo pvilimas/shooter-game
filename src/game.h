@@ -10,14 +10,8 @@ void        Draw();
 void        Quit();
 
 // game functions
-void        HandleInput();
-
 void        TileBackground();
 void        DrawUI();
-
-void        RenderPlayer();
-void        RenderEnemies();
-void        RenderBullets();
 
 void        SpawnEnemy(Vector2 pos, float angle, int speed);
 void        SpawnBullet(Vector2 pos, float angle, int speed);
@@ -38,9 +32,12 @@ float       RandFloat(float min, float max);
 // TODO
 void        CheckCollisions();
 
-void        CreateTimer(TimerCallback fn, double interval, int num_triggers);
-bool        UpdateTimer(Timer* t);
-void        UpdateTimers();
+void        UpdateObjects();
+void        RenderObjects();
+
+Object*     CreateObject(ObjType type);
+Object*     GetObject(ObjType type, int id);
+void        DeleteObject(ObjType type, int id);
 
 // assets.c
 void        UnloadAssets();
@@ -58,5 +55,13 @@ void        FreeFontCallback(void* font);
 void        DefaultTimerCallback();
 void        PlayerShootAtMouseCallback();
 void        SpawnEnemyCallback();
+
+void        ObjUpdateTimerCallback(void* obj);
+void        ObjUpdatePlayerCallback(void* obj);
+void        ObjRenderPlayerCallback(void* obj);
+void        ObjUpdateEnemyCallback(void* obj);
+void        ObjRenderEnemyCallback(void* obj);
+void        ObjUpdateBulletCallback(void* obj);
+void        ObjRenderBulletCallback(void* obj);
 
 #endif // GAME_H
