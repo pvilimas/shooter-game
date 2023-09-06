@@ -71,3 +71,78 @@ void ObjRenderPlayerCallback(void* obj) {
         DrawCircle(game.player->data.ent_data.pos.x, game.player->data.ent_data.pos.y, 5.0f, BLACK);
     }
 }
+
+void ObjUpdateEnemyCallback(void* obj) {
+    Object* o = (Object*) obj;
+
+    // track player
+    int dx = game.player->data.ent_data.pos.x - o->data.ent_data.pos.x;
+    int dy = game.player->data.ent_data.pos.y - o->data.ent_data.pos.y;
+    o->data.ent_data.angle = atan2(dy, dx);
+
+    o->data.ent_data.pos.x += cos(o->data.ent_data.angle) * o->data.ent_data.speed;
+    o->data.ent_data.pos.y += sin(o->data.ent_data.angle) * o->data.ent_data.speed;
+
+    // check collision between enemy and player
+    bool player_takes_dmg = !game.player->data.ent_data.iframes && CheckCollisionCircles(
+        o->data.ent_data.pos, o->data.ent_data.hitbox_radius,
+        game.player->data.ent_data.pos, game.player->data.ent_data.hitbox_radius);
+    if (player_takes_dmg) {
+        game.player->data.ent_data.health--;
+        game.player->data.ent_data.iframes = 120;
+    }
+
+    // check collision between enemy and bullet
+    for (int j = 0; j < OBJECT_SLOTS; j++) {
+        Object* b = GetObject(OBJ_ENTITY_BULLET, j);
+
+        if (Vector2Distance(o->data.ent_data.pos, b->data.ent_data.pos) > 50) {
+            continue;
+        }
+        bool enemy_takes_dmg = CheckCollisionCircles(
+            o->data.ent_data.pos, o->data.ent_data.hitbox_radius,
+            b->data.ent_data.pos, b->data.ent_data.hitbox_radius);
+        if (enemy_takes_dmg) {
+            o->data.ent_data.health -= b->data.ent_data.damage;
+            DeleteObject(OBJ_ENTITY_BULLET, b->id);
+        }
+    }
+
+    // remove if dead
+    if (o->data.ent_data.health <= 0) {
+        DeleteObject(OBJ_ENTITY_ENEMY, o->id);
+    }
+}
+
+void ObjRenderEnemyCallback(void* obj) {
+    Object* o = (Object*) obj;
+    DrawCircle(o->data.ent_data.pos.x, o->data.ent_data.pos.y, 25, BLACK);
+    DrawCircle(o->data.ent_data.pos.x, o->data.ent_data.pos.y, 22, RED);
+}
+
+void ObjUpdateBulletCallback(void* obj) {
+    Object* o = (Object*) obj;
+    
+    o->data.ent_data.pos.x += cos(o->data.ent_data.angle) * o->data.ent_data.speed;
+    o->data.ent_data.pos.y += sin(o->data.ent_data.angle) * o->data.ent_data.speed;
+    o->data.ent_data.lifetime--;
+
+    if (o->data.ent_data.lifetime == 0) {
+        DeleteObject(OBJ_ENTITY_BULLET, o->id);
+    }
+}
+
+void ObjRenderBulletCallback(void* obj) {
+    Object* o = (Object*) obj;
+    float c = cos(o->data.ent_data.angle);
+    float s = sin(o->data.ent_data.angle);
+
+    DrawLineEx(
+        (Vector2){o->data.ent_data.pos.x - c * 5, o->data.ent_data.pos.y - s * 5},
+        (Vector2){o->data.ent_data.pos.x + c * 5, o->data.ent_data.pos.y + s * 5},
+        4.0f, BLACK);
+    DrawLineEx(
+        (Vector2){o->data.ent_data.pos.x - c * 4, o->data.ent_data.pos.y - s * 4},
+        (Vector2){o->data.ent_data.pos.x + c * 4, o->data.ent_data.pos.y + s * 4},
+        3.0f, WHITE);
+}

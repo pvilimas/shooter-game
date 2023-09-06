@@ -16,13 +16,12 @@ void DrawSceneGameplay() {
 
     BeginDrawing();
         BeginMode2D(game.camera);
-            
+
             /* all in-game objects get drawn here */
             
             TileBackground();
-            RenderPlayer();
-            RenderEnemies();
-            RenderBullets();
+            UpdateObjects();
+            RenderObjects();
 
         EndMode2D();
 

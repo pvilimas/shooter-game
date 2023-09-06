@@ -12,36 +12,11 @@
 #include "raymath.h"
 
 #define WINDOW_TITLE "Shooter Game"
-
 #define OBJECT_SLOTS 1000
 
+#define DEBUG printf("\t%s: %d\n", __FILE__, __LINE__)
+
 #define DEBUGGING 1
-
-// the types of entities
-typedef struct {
-    Vector2 pos;
-    int speed; // 3
-    int health; // 5
-    int iframes; // # invincibility frames remaining
-    int hitbox_radius;
-} Player;
-
-typedef struct {
-    Vector2 pos;
-    float angle; // 0 = ->
-    int speed; // 2
-    int health; // 1
-    int hitbox_radius;
-} Enemy;
-
-typedef struct {
-    Vector2 pos;
-    float angle;
-    int speed; // 10
-    int lifetime; // decrements each frame to 0
-    int damage; // 1
-    int hitbox_radius;
-} Bullet;
 
 // timer class
 typedef void (*TimerCallback)();
@@ -126,6 +101,8 @@ typedef union {
 
 // a game object
 typedef struct {
+    bool        active;     // if false it's empty
+    int         id;         // local to each sublist
     ObjType     type;
     ObjCallback update;
     ObjCallback render;
@@ -136,12 +113,8 @@ typedef struct {
 typedef struct {
     Vector2     screen_size;
     Camera2D    camera;
-    // Player      player;
     Object*     player;
 
-    // TODO change to GArray
-    GPtrArray*  enemies;                // <Enemy*>
-    GPtrArray*  bullets;                // <Bullet*>
     GPtrArray*  timers;                 // <Timer*>
 
     GHashTable* textures;               // <cchar*, Texture2D*>
@@ -150,7 +123,7 @@ typedef struct {
     Scene       current_scene;
     int         frame_count;            // increment every frame
 
-    GArray*     objects[OBJ_COUNT];     // <Object*>
+    Object      objects[OBJ_COUNT][OBJECT_SLOTS];
 } Game;
 
 // global instance of the game
