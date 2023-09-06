@@ -50,8 +50,16 @@ void Init() {
     game.frame_count = 0;
 
     CreateTexture("background", "assets/bg.png");
-    CreateTimer(PlayerShootAtMouseCallback, 2.0, -1);
-    CreateTimer(SpawnEnemyCallback, 0.1, -1);
+
+    Object* timer = CreateObject(OBJ_TIMER);
+    timer->data.tm_data.fn = PlayerShootAtMouseCallback;
+    timer->data.tm_data.interval = 2.0;
+    timer->data.tm_data.num_triggers = -1;
+
+    timer = CreateObject(OBJ_TIMER);
+    timer->data.tm_data.fn = SpawnEnemyCallback;
+    timer->data.tm_data.interval = 0.1;
+    timer->data.tm_data.num_triggers = -1;
 }
 
 // one iteration of the game loop

@@ -9,7 +9,6 @@ void DrawSceneStartScreen() {
 }
 
 void DrawSceneGameplay() {
-    UpdateTimers();
 
     // update camera target to player
     game.camera.target = game.player->data.ent_data.pos;

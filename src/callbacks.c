@@ -47,6 +47,26 @@ void SpawnEnemyCallback() {
     SpawnEnemy(pos, angle, 1);
 }
 
+void ObjUpdateTimerCallback(void* obj) {
+    double now = GetTime();
+    Object* timer = (Object*) obj;
+
+    if (now - timer->data.tm_data.last_recorded < timer->data.tm_data.interval) {
+        return;
+    }
+
+    timer->data.tm_data.last_recorded = now;
+    timer->data.tm_data.fn();
+
+    if (timer->data.tm_data.num_triggers > -1) {
+        timer->data.tm_data.num_triggers--;
+    }
+
+    if (timer->data.tm_data.num_triggers == 0) {
+        DeleteObject(OBJ_TIMER, timer->id);
+    }
+}
+
 void ObjUpdatePlayerCallback(void* obj) {
     if (IsKeyDown(KEY_W)) {
         game.player->data.ent_data.pos.y -= 5;

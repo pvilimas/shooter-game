@@ -18,17 +18,6 @@
 
 #define DEBUGGING 1
 
-// timer class
-typedef void (*TimerCallback)();
-
-// TODO fix num_triggers
-typedef struct {
-    double interval;
-    int num_triggers; // -1 = inf
-    TimerCallback fn;
-    double last_recorded;
-} Timer;
-
 typedef enum {
     SCENE_STARTSCREEN,
     SCENE_GAMEPLAY,
@@ -53,12 +42,14 @@ typedef enum {
 // each object has 2 methods: update and render (each called once per frame)
 
 typedef enum {
+    OBJ_TIMER,
+
     OBJ_ENTITY_PLAYER,
     OBJ_ENTITY_ENEMY,
     OBJ_ENTITY_BULLET,
+    
     OBJ_UI_BUTTON,
     OBJ_UI_TEXT,
-    OBJ_TIMER,
 
     OBJ_COUNT
 } ObjType;
@@ -85,6 +76,8 @@ typedef struct {
     Vector2 pos;
 } UIObjData;
 
+typedef void (*TimerCallback)();
+
 // data for timers
 typedef struct {
     double          interval;
@@ -96,7 +89,7 @@ typedef struct {
 typedef union {
     EntityObjData   ent_data;
     UIObjData       ui_data;
-    TimerObjData    timer_data;
+    TimerObjData    tm_data;
 } ObjData;
 
 // a game object
