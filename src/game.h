@@ -15,14 +15,15 @@
     - end screen
         - time survived
 
-    - start adding different types of enemies and bullets
-    - make sure collision detection isn't totally slow/broken
+    - start adding different types of enemies and bullets, maybe 5 of each
+        - make sure collision detection isn't totally slow/broken
     - make some kinda upgrade tree
     - add some sound effects
-    - add a dev mode CLI setting
+    - add a dev mode CLI flag
         - prints debug info and logs stuff
         - makes hitboxes visible
     - make some pixel art instead of drawing primitives
+        - animate them
 */
 
 // game.c
