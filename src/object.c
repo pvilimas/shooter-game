@@ -3,6 +3,12 @@
 
 #include "game.h"
 
+/*
+    object.c - managing object slots
+    - there are OBJ_TYPE_COUNT types, and each has OBJ_SLOT_COUNT slots
+    - everything in the game is an object: player, enemies, buttons, etc
+*/
+
 void UpdateObjects() {
     for (int type = 0; type < OBJ_TYPE_COUNT; type++) {
         for (int i = 0; i < OBJ_SLOT_COUNT; i++) {

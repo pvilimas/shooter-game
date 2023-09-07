@@ -7,6 +7,7 @@
     TODO
     - start screen
         - add title
+        - add quit button
         - add settings button/menu (leave it empty for now)
     - gameplay
         - redesign healthbar using colors 1-5
@@ -50,6 +51,7 @@ bool        PointNearScreen(Vector2 p, float range);
 int         RandInt(int min, int max);
 float       RandFloat(float min, float max);
 
+// object.c
 void        UpdateObjects();
 void        RenderObjects();
 void        DeleteObjects();
