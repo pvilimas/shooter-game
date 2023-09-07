@@ -3,13 +3,34 @@
 
 #include "types.h"
 
-// main functions
+/*
+    TODO
+    - start screen
+        - add title
+        - add settings button/menu (leave it empty for now)
+    - gameplay
+        - redesign healthbar using colors 1-5
+        - add timer
+        - pause menu
+    - end screen
+        - time survived
+
+    - start adding different types of enemies and bullets
+    - make sure collision detection isn't totally slow/broken
+    - make some kinda upgrade tree
+    - add some sound effects
+    - add a dev mode CLI setting
+        - prints debug info and logs stuff
+        - makes hitboxes visible
+    - make some pixel art instead of drawing primitives
+*/
+
+// game.c
 void        Config();
 void        Init();
 void        Draw();
 void        Quit();
 
-// game functions
 void        TileBackground();
 void        KillPlayer();
 
@@ -48,7 +69,7 @@ void        DeleteFont(char* name);
 // callbacks.c
 void        TestCallback();
 
-// glib or memory management
+// glib/memory
 
 void        FreeTextureCallback(void* texture);
 void        FreeFontCallback(void* font);

@@ -15,7 +15,6 @@
 #define WINDOW_TITLE "Shooter Game"
 
 #define DEBUG printf("\t%s: %d\n", __FILE__, __LINE__)
-
 #define DEBUGGING 1
 
 typedef enum {
@@ -49,9 +48,9 @@ typedef enum {
 // object is passed through a voidptr
 typedef void (*ObjCallback)(void* object);
 
-typedef void (*TimerCallback)();
+// timer object
 
-// data for timers
+typedef void (*TimerCallback)();
 typedef struct {
     double          interval;
     int             num_triggers; // -1 = inf
@@ -59,7 +58,8 @@ typedef struct {
     double          last_recorded;
 } TimerObjData;
 
-// data that all entities have
+// entity object
+
 typedef struct {
     Vector2     pos;
     int         speed;
@@ -72,9 +72,9 @@ typedef struct {
     int         hitbox_radius;
 } EntityObjData;
 
-typedef void (*UICallback)();
+// ui object
 
-// data that all ui elements have
+typedef void (*UICallback)();
 typedef struct {
     Vector2 pos;
     Vector2 size;
@@ -92,6 +92,8 @@ typedef struct {
     UICallback callback;
 } UIObjData;
 
+// object
+
 typedef union {
     TimerObjData    tm_data;
     EntityObjData   ent_data;
@@ -100,15 +102,16 @@ typedef union {
 
 // a game object
 typedef struct {
-    bool        active;     // if false it's empty
     int         id;         // local to each sublist
     ObjType     type;
+    bool        active;     // if false it's empty
     ObjCallback update;
     ObjCallback render;
     ObjData     data;
 } Object;
 
-// the game class
+// game class
+
 typedef struct {
     Vector2     screen_size;
     Camera2D    camera;
