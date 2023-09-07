@@ -11,6 +11,7 @@ void        Quit();
 
 // game functions
 void        TileBackground();
+void        KillPlayer();
 
 // scene.c
 void        LoadScene(Scene new_scene);
@@ -27,11 +28,9 @@ bool        PointNearScreen(Vector2 p, float range);
 int         RandInt(int min, int max);
 float       RandFloat(float min, float max);
 
-// TODO
-void        CheckCollisions();
-
 void        UpdateObjects();
 void        RenderObjects();
+void        DeleteObjects();
 
 Object*     CreateObject(ObjType type);
 Object*     GetObject(ObjType type, int id);
@@ -49,11 +48,17 @@ void        DeleteFont(char* name);
 // callbacks.c
 void        TestCallback();
 
+// glib or memory management
+
 void        FreeTextureCallback(void* texture);
 void        FreeFontCallback(void* font);
 
+// timer callbacks
+
 void        PlayerShootAtMouseCallback();
 void        SpawnEnemyCallback();
+
+// object callbacks
 
 void        ObjUpdateTimerCallback(void* obj);
 
@@ -64,6 +69,14 @@ void        ObjRenderEnemyCallback(void* obj);
 void        ObjUpdateBulletCallback(void* obj);
 void        ObjRenderBulletCallback(void* obj);
 
+void        ObjRenderTextCallback(void* obj);
+void        ObjUpdateButtonCallback(void* obj);
+void        ObjRenderButtonCallback(void* obj);
 void        ObjRenderHealthbarCallback(void* obj);
+
+// button/ui callbacks (on-click)
+
+void        BtnStartCallback();
+void        BtnRestartCallback();
 
 #endif // GAME_H

@@ -18,51 +18,34 @@ void Config() {
 
 // set up the game
 void Init() {
+    game.current_scene = SCENE_STARTUP;
+    game.frame_count = 0;
+
     game.screen_size = (Vector2) {
         GetScreenWidth(),
         GetScreenHeight()
     };
 
-    // game.objects = {};
-    for (int type = 0; type < OBJ_TYPE_COUNT; type++) {
-        for (int id = 0; id < OBJ_SLOT_COUNT; id++) {
-            game.objects[type][id].active = false;
-        }
-    }
+    // init game objects
+    DeleteObjects();
 
-    game.player = CreateObject(OBJ_ENTITY_PLAYER);
-
+    // create camera
     game.camera = (Camera2D) {
-        .target = game.player->data.ent_data.pos, /* target follows player */
+        .target = { 0, 0 },
         .offset = { game.screen_size.x / 2, game.screen_size.y / 2 },
         .rotation = 0.0f,
         .zoom = 1.0f
     };
 
+    // init textures and fonts
     game.textures = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, FreeTextureCallback);
     game.fonts = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, FreeFontCallback);
 
-    game.current_scene = SCENE_GAMEPLAY;
-    game.frame_count = 0;
-
     CreateTexture("background", "assets/bg.png");
 
-    // timer: shoot basic bullets
-    Object* o = CreateObject(OBJ_TIMER);
-    o->data.tm_data.callback = PlayerShootAtMouseCallback;
-    o->data.tm_data.interval = 2.0;
-    o->data.tm_data.num_triggers = -1;
-
-    // timer: spawn normal enemies
-    o = CreateObject(OBJ_TIMER);
-    o->data.tm_data.callback = SpawnEnemyCallback;
-    o->data.tm_data.interval = 0.1;
-    o->data.tm_data.num_triggers = -1;
-
-    // player healthbar
-    CreateObject(OBJ_UI_HEALTHBAR);
+    LoadScene(SCENE_STARTSCREEN);
 }
 
 // one iteration of the game loop
@@ -100,4 +83,10 @@ void TileBackground() {
             );
         }
     }
+}
+
+// gets called when hp = 0 or when they surrender
+// runs the death animation and transitions to endscreen
+void KillPlayer() {
+    LoadScene(SCENE_ENDSCREEN);
 }

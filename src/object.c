@@ -43,6 +43,14 @@ void RenderObjects() {
     }
 }
 
+void DeleteObjects() {
+    for (int type = 0; type < OBJ_TYPE_COUNT; type++) {
+        for (int id = 0; id < OBJ_SLOT_COUNT; id++) {
+            game.objects[type][id].active = false;
+        }
+    }
+}
+
 Object* CreateObject(ObjType type) {
     // find first open slot
     int id;
@@ -94,6 +102,18 @@ Object* CreateObject(ObjType type) {
             .lifetime = 30
         };
         break;
+    case OBJ_UI_TEXT:
+        o.update = NULL;
+        o.render = ObjRenderTextCallback;
+        break;
+    case OBJ_UI_BUTTON:
+        o.update = ObjUpdateButtonCallback;
+        o.render = ObjRenderButtonCallback;
+        o.data.ui_data = (UIObjData) {
+            .label = "",
+            .callback = NULL
+        };
+        break;
     case OBJ_UI_HEALTHBAR:
         o.update = NULL;
         o.render = ObjRenderHealthbarCallback;
@@ -116,6 +136,7 @@ Object* GetObject(ObjType type, int id) {
 // keeps rest of ids the same
 void DeleteObject(ObjType type, int id) {
     game.objects[type][id].active = false;
+    // now next time an object gets added it will overwrite this slot
 }
 
 #endif // OBJECT_C

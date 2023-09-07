@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "glib.h"
 #include "raylib.h"
@@ -18,6 +19,7 @@
 #define DEBUGGING 1
 
 typedef enum {
+    SCENE_STARTUP,
     SCENE_STARTSCREEN,
     SCENE_GAMEPLAY,
     SCENE_ENDSCREEN
@@ -47,6 +49,16 @@ typedef enum {
 // object is passed through a voidptr
 typedef void (*ObjCallback)(void* object);
 
+typedef void (*TimerCallback)();
+
+// data for timers
+typedef struct {
+    double          interval;
+    int             num_triggers; // -1 = inf
+    TimerCallback   callback;
+    double          last_recorded;
+} TimerObjData;
+
 // data that all entities have
 typedef struct {
     Vector2     pos;
@@ -60,27 +72,30 @@ typedef struct {
     int         hitbox_radius;
 } EntityObjData;
 
+typedef void (*UICallback)();
+
 // data that all ui elements have
 typedef struct {
     Vector2 pos;
     Vector2 size;
-    char label[100];
+
+    // from most to least used
+
+    Color color1;
+    Color color2;
+    Color color3;
+    Color color4;
+    Color color5;
+
+    const char* label;
+    
+    UICallback callback;
 } UIObjData;
 
-typedef void (*TimerCallback)();
-
-// data for timers
-typedef struct {
-    double          interval;
-    int             num_triggers; // -1 = inf
-    TimerCallback   callback;
-    double          last_recorded;
-} TimerObjData;
-
 typedef union {
+    TimerObjData    tm_data;
     EntityObjData   ent_data;
     UIObjData       ui_data;
-    TimerObjData    tm_data;
 } ObjData;
 
 // a game object
