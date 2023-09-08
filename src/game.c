@@ -19,23 +19,6 @@ void Config() {
 // set up the game
 void Init() {
     game.current_scene = SCENE_STARTUP;
-    game.frame_count = 0;
-
-    game.screen_size = (Vector2) {
-        GetScreenWidth(),
-        GetScreenHeight()
-    };
-
-    // init game objects
-    DeleteObjects();
-
-    // create camera
-    game.camera = (Camera2D) {
-        .target = { 0, 0 },
-        .offset = { game.screen_size.x / 2, game.screen_size.y / 2 },
-        .rotation = 0.0f,
-        .zoom = 1.0f
-    };
 
     // init textures and fonts
     game.textures = g_hash_table_new_full(g_str_hash, g_str_equal,
@@ -53,6 +36,7 @@ void Init() {
 void Draw() {
     static void (*scene_draw_functions[])() = {
         [SCENE_STARTSCREEN] = DrawSceneStartScreen,
+        [SCENE_SETTINGS] = DrawSceneSettings,
         [SCENE_GAMEPLAY] = DrawSceneGameplay,
         [SCENE_ENDSCREEN] = DrawSceneEndScreen
     };

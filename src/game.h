@@ -25,6 +25,7 @@
         - makes hitboxes visible
     - make some pixel art instead of drawing primitives
         - animate them
+    - resolution menu like terraria has
 */
 
 // game.c
@@ -38,7 +39,14 @@ void        KillPlayer();
 
 // scene.c
 void        LoadScene(Scene new_scene);
+
+void        LoadSceneStartScreen();
+void        LoadSceneSettings();
+void        LoadSceneGameplay();
+void        LoadSceneEndScreen();
+
 void        DrawSceneStartScreen();
+void        DrawSceneSettings();
 void        DrawSceneGameplay();
 void        DrawSceneEndScreen();
 
@@ -62,9 +70,11 @@ void        DeleteObject(ObjType type, int id);
 
 // assets.c
 void        UnloadAssets();
+
 void        CreateTexture(char* name, const char* filepath);
 Texture2D*  GetTexture(char* name);
 void        DeleteTexture(char* name);
+
 void        CreateFont(char* name, const char* filepath);
 Font*       GetFont(char* name);
 void        DeleteFont(char* name);
@@ -77,12 +87,12 @@ void        TestCallback();
 void        FreeTextureCallback(void* texture);
 void        FreeFontCallback(void* font);
 
-// timer callbacks
+// timer
 
 void        PlayerShootAtMouseCallback();
 void        SpawnEnemyCallback();
 
-// object callbacks
+// object
 
 void        ObjUpdateTimerCallback(void* obj);
 
@@ -98,9 +108,10 @@ void        ObjUpdateButtonCallback(void* obj);
 void        ObjRenderButtonCallback(void* obj);
 void        ObjRenderHealthbarCallback(void* obj);
 
-// button/ui callbacks (on-click)
+// button/ui
 
 void        BtnStartCallback();
+void        BtnSettingsCallback();
 void        BtnRestartCallback();
 
 #endif // GAME_H

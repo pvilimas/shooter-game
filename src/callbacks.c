@@ -315,6 +315,10 @@ void BtnStartCallback() {
     LoadScene(SCENE_GAMEPLAY);
 }
 
+void BtnSettingsCallback() {
+    LoadScene(SCENE_SETTINGS);
+}
+
 void BtnRestartCallback() {
     LoadScene(SCENE_GAMEPLAY);
 }

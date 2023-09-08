@@ -20,6 +20,7 @@
 typedef enum {
     SCENE_STARTUP,
     SCENE_STARTSCREEN,
+    SCENE_SETTINGS,
     SCENE_GAMEPLAY,
     SCENE_ENDSCREEN
 } Scene;

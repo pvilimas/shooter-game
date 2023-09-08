@@ -14,12 +14,8 @@ void UpdateObjects() {
         for (int i = 0; i < OBJ_SLOT_COUNT; i++) {
             Object* o = GetObject(type, i);
 
-            if (!o->active) {
-                continue;
-            }
-
-            // skip if update = NULL
-            if (!o->update) {
+            // skip if unloaded or update = NULL
+            if (!o->active || !o->update) {
                 continue;
             }
 
@@ -34,12 +30,8 @@ void RenderObjects() {
         for (int i = 0; i < OBJ_SLOT_COUNT; i++) {
             Object* o = GetObject(type, i);
 
-            if (!o->active) {
-                continue;
-            }
-
-            // skip if render = NULL
-            if (!o->render) {
+            // skip if unloaded or render = NULL
+            if (!o->active || !o->render) {
                 continue;
             }
 
