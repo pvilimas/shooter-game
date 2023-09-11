@@ -7,7 +7,8 @@ void Config() {
     SetTraceLogLevel(LOG_WARNING);
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
     InitWindow(GetScreenWidth(), GetScreenHeight(), WINDOW_TITLE);
-    ToggleFullscreen();
+    // ToggleFullscreen();
+    MaximizeWindow();
 
     // disable exit key when not debugging
     if (!DEBUGGING) SetExitKey(0);
@@ -27,6 +28,20 @@ void Init() {
         NULL, FreeFontCallback);
 
     CreateTexture("background", "assets/bg.png");
+
+    game.frame_count = 0;
+    game.screen_size = (Vector2) {
+        GetScreenWidth(),
+        GetScreenHeight()
+    };
+
+    // create camera
+    game.camera = (Camera2D) {
+        .target = { 0, 0 },
+        .offset = { game.screen_size.x / 2, game.screen_size.y / 2 },
+        .rotation = 0.0f,
+        .zoom = 1.0f
+    };
 
     LoadScene(SCENE_STARTSCREEN);
 }

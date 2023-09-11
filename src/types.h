@@ -89,8 +89,9 @@ typedef struct {
     Color color5;
 
     const char* label;
+    int font_size;
     
-    UICallback callback;
+    UICallback callback;        // on-click function
 } UIObjData;
 
 // object

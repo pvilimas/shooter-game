@@ -203,6 +203,12 @@ void ObjRenderBulletCallback(void* obj) {
 
 void ObjRenderTextCallback(void* obj) {
     
+    // text only uses color1
+
+    Object* text = (Object*) obj;
+    UIObjData* tdata = &text->data.ui_data;
+
+    DrawText(tdata->label, tdata->pos.x, tdata->pos.y, tdata->font_size, tdata->color1);
 }
 
 // OBJ_UI_BUTTON

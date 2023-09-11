@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "types.h"
+#include "objdata.h"
 
 /*
     TODO
@@ -16,6 +17,7 @@
     - end screen
         - time survived
 
+    - find fonts
     - start adding different types of enemies and bullets, maybe 5 of each
         - make sure collision detection isn't totally slow/broken
     - make some kinda upgrade tree
