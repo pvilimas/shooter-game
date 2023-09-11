@@ -5,15 +5,8 @@
 
 /*
     TODO
-    - start screen
-        - add quit button
-        - add settings button/menu (leave it empty for now)
     - gameplay
-        - redesign healthbar using colors 1-5
-        - add timer
         - pause menu
-    - end screen
-        - time survived
 
     - find fonts
     - start adding different types of enemies and bullets, maybe 5 of each
@@ -59,6 +52,7 @@ bool        PointNearScreen(Vector2 p, float range);
 int         RandInt(int min, int max);
 float       RandFloat(float min, float max);
 bool        PercentChance(float percent);
+const char* GameTimeStr(double seconds);
 
 // object.c
 void        UpdateObjects();
@@ -102,6 +96,8 @@ void        ObjRenderTextCallback(void* obj);
 void        ObjUpdateButtonCallback(void* obj);
 void        ObjRenderButtonCallback(void* obj);
 void        ObjRenderHealthbarCallback(void* obj);
+void        ObjRenderGameTimerCallback(void* obj);
+void        ObjRenderTimeSurvivedCallback(void* obj);
 
 void        BtnStartCallback();
 void        BtnSettingsCallback();

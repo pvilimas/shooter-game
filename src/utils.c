@@ -52,3 +52,20 @@ bool PercentChance(float percent) {
 
     return (float)rand() / (float)RAND_MAX * 100.0f <= percent;
 }
+
+// returns the game time as a string
+const char* GameTimeStr(double seconds) {
+    // int h = (int)seconds / 3600;
+    // int m = ((int)seconds % 3600) / 60;
+    // int s = (int)seconds % 60;
+
+    // if (h > 0) {
+    //     sprintf(game.buffer, "%d:%d:%02d", h, m, s);
+    // } else {
+    //     sprintf(game.buffer, "%d:%d", m, s);
+    // }
+
+    sprintf(game.buffer, "%.1lf", seconds);
+
+    return (const char*) game.buffer;
+}

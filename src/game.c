@@ -27,6 +27,13 @@ void Init() {
     game.fonts = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, MemFreeFontCallback);
 
+    // load assets
+
+    CreateTexture("healthbar_1", "assets/healthbar_1.png");
+    CreateTexture("healthbar_2", "assets/healthbar_2.png");
+    CreateTexture("healthbar_3", "assets/healthbar_3.png");
+    CreateTexture("healthbar_4", "assets/healthbar_4.png");
+    CreateTexture("healthbar_5", "assets/healthbar_5.png");
     CreateTexture("background", "assets/bg_new_new.png");
 
     game.frame_count = 0;

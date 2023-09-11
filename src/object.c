@@ -84,9 +84,11 @@ Object* CreateObject(ObjClass class) {
     } else if (type == OBJ_UI_BUTTON) {
         o.update = ObjUpdateButtonCallback;
         o.render = ObjRenderButtonCallback;
-    } else if (type == OBJ_UI_HEALTHBAR) {
+    } else if (type == OBJ_UI_ELEMENT) {
+        // each type of element will have different update and render
+        // functions
         o.update = NULL;
-        o.render = ObjRenderHealthbarCallback;
+        o.render = NULL;
     } else {
         printf("update CreateObject type data - L%d (object.c)\n", __LINE__);
     }
@@ -151,7 +153,7 @@ Object* CreateObject(ObjClass class) {
             .max_health = 100,
             .health = 100,
             .damage = 0,
-            .hitbox_radius = 5
+            .hitbox_radius = 25
         };
     } else if (class == OC_GAMEPLAY_ENTITY_ENEMY_BASIC) {
         o.data.ent_data = (EntityObjData) {
@@ -182,15 +184,19 @@ Object* CreateObject(ObjClass class) {
             .interval = 0.1,
             .num_triggers = -1
         };
-    } else if (class == OC_GAMEPLAY_UI_HEALTHBAR) {
-        o.data.ui_data = (UIObjData) {
-            .pos = {20, 20},
-            .size = {200, 43}
-        };
-    } else if (OC_STARTSCREEN_UI_START_BUTTON) {
+    } else if (class == OC_GAMEPLAY_UI_ELEMENT_HEALTHBAR) {
+        o.update = NULL;
+        o.render = ObjRenderHealthbarCallback;
+    } else if (class == OC_GAMEPLAY_UI_ELEMENT_GAME_TIMER) {
+        o.update = NULL;
+        o.render = ObjRenderGameTimerCallback;
+    } else if (class == OC_ENDSCREEN_UI_ELEMENT_TIME_SURVIVED) {
+        o.update = NULL;
+        o.render = ObjRenderTimeSurvivedCallback;
+    } else if (OC_ENDSCREEN_UI_RESTART_BUTTON) {
         o.data.ui_data = (UIObjData) {
             .pos = (Vector2){(game.screen_size.x / 2) - 100,
-                (game.screen_size.y / 2) - 25},
+                (game.screen_size.y / 2) + 125},
             .size = (Vector2) { 200, 50 },
             .color1 = (Color) { 200, 200, 200, 255 },
             .color2 = (Color) { 150, 150, 150, 255 },
@@ -198,7 +204,7 @@ Object* CreateObject(ObjClass class) {
             .color4 = (Color) { 120, 120, 120, 255 },
             .color5 = (Color) { 160, 160, 160, 255 },
             .callback = BtnRestartCallback,
-            .label = "Restart"
+            .label = "Restart?"
         };
     } else {
         printf("update CreateObject class data - L%d (object.c)\n", __LINE__);
@@ -244,8 +250,10 @@ ObjType GetObjTypeOfClass(ObjClass class) {
         case OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC:
             return OBJ_TIMER;
         
-        case OC_GAMEPLAY_UI_HEALTHBAR:
-            return OBJ_UI_HEALTHBAR;
+        case OC_GAMEPLAY_UI_ELEMENT_HEALTHBAR:
+        case OC_GAMEPLAY_UI_ELEMENT_GAME_TIMER:
+        case OC_ENDSCREEN_UI_ELEMENT_TIME_SURVIVED:
+            return OBJ_UI_ELEMENT;
             
         default:
             printf("update GetObjTypeOfClass - L%d (object.c)\n", __LINE__);

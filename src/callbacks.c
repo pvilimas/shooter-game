@@ -101,7 +101,7 @@ void ObjRenderPlayerCallback(void* obj) {
     EntityObjData* pdata = &game.player->data.ent_data;
 
     if (pdata->iframes % 20 < 10) {
-        DrawCircle(pdata->pos.x, pdata->pos.y, 5.0f, BLACK);
+        DrawCircle(pdata->pos.x, pdata->pos.y, 25.0f, BLACK);
     }
 }
 
@@ -297,7 +297,7 @@ void ObjRenderButtonCallback(void* obj) {
     DrawText(bdata->label, text_x, text_y, 20, BLACK);
 }
 
-// OBJ_UI_HEALTHBAR
+// OBJ_UI_ELEMENT
 
 void ObjRenderHealthbarCallback(void* obj) {
     Object* hb = (Object*) obj;
@@ -306,12 +306,22 @@ void ObjRenderHealthbarCallback(void* obj) {
 
     Vector2 abs_pos = GetAbsPosition(hdata->pos);
 
-    for (int i = 0; i < pdata->max_health / 20; i++) {
-        DrawRectangleRec((Rectangle){abs_pos.x + (40*i), abs_pos.y, 43, 15}, BLACK);
-    }
-    for (int i = 0; i < pdata->health / 20; i++) {
-        DrawRectangleRec((Rectangle){abs_pos.x + 3 + (40*i), abs_pos.y + 3, 37, 9}, (Color){255, 0, 0, 255});
-    }
+    Texture2D* tex = GetTexture(
+        TextFormat("healthbar_%d", (int) pdata->health / 20));
+
+    DrawTexture(*tex, pdata->pos.x - 73, pdata->pos.y - 75, WHITE);
+}
+
+void ObjRenderGameTimerCallback(void* obj) {
+    Vector2 abs_pos = GetAbsPosition((Vector2){20, 20});
+
+    const char* time_string = GameTimeStr(game.gameplay_time_elapsed);
+    DrawText(time_string, abs_pos.x, abs_pos.y, 40, BLACK);
+}
+
+void ObjRenderTimeSurvivedCallback(void* obj) {
+    DrawText(TextFormat("You survived %d seconds", (int) game.gameplay_time_elapsed),
+        game.screen_size.x / 2 - 50, game.screen_size.y / 2, 50, BLACK);
 }
 
 // button callbacks

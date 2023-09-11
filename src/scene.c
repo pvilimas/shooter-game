@@ -63,17 +63,22 @@ void LoadSceneGameplay() {
     // create objects for gameplay - player, timers, ui
 
     game.player = CreateObject(OC_GAMEPLAY_ENTITY_PLAYER);
-    CreateObject(OC_GAMEPLAY_UI_HEALTHBAR);
+    CreateObject(OC_GAMEPLAY_UI_ELEMENT_GAME_TIMER);
+    CreateObject(OC_GAMEPLAY_UI_ELEMENT_HEALTHBAR);
 
     // timer: shoot basic bullets
     CreateObject(OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC);
 
     // timer: spawn normal enemies
     CreateObject(OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC);
+
+    // start the timer
+    game.gameplay_time_elapsed = GetTime();
 }
 
 void LoadSceneEndScreen() {
     CreateObject(OC_ENDSCREEN_UI_RESTART_BUTTON);
+    CreateObject(OC_ENDSCREEN_UI_ELEMENT_TIME_SURVIVED);
 }
 
 void DrawSceneStartScreen() {
@@ -109,6 +114,7 @@ void DrawSceneGameplay() {
 
     EndDrawing();
     game.frame_count++;
+    game.gameplay_time_elapsed += (double) GetFrameTime();
 }
 
 void DrawSceneEndScreen() {

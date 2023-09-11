@@ -41,7 +41,7 @@ typedef enum {
     
     OBJ_UI_TEXT,
     OBJ_UI_BUTTON,
-    OBJ_UI_HEALTHBAR,
+    OBJ_UI_ELEMENT,
 
     OBJ_TYPE_COUNT
 } ObjType;
@@ -59,8 +59,10 @@ typedef enum {
     OC_GAMEPLAY_ENTITY_BULLET_BASIC,
     OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC,
     OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC,
-    OC_GAMEPLAY_UI_HEALTHBAR,
+    OC_GAMEPLAY_UI_ELEMENT_HEALTHBAR,
+    OC_GAMEPLAY_UI_ELEMENT_GAME_TIMER,
     
+    OC_ENDSCREEN_UI_ELEMENT_TIME_SURVIVED,
     OC_ENDSCREEN_UI_RESTART_BUTTON,
 
     OC_COUNT
@@ -143,11 +145,14 @@ typedef struct {
 
     Scene       current_scene;
     int         frame_count;            // increment every frame
+    double      gameplay_time_elapsed;  // since user clicked start (sec)
 
     GHashTable* textures;               // <cchar*, Texture2D*>
     GHashTable* fonts;                  // <cchar*, Font*>
 
     Object      objects[OBJ_TYPE_COUNT][OBJ_SLOT_COUNT];
+    char        buffer[1000];           // a buffer to use for storing stuff
+
 } Game;
 
 // global instance of the game
