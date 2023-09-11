@@ -207,26 +207,31 @@ void DeleteObject(ObjType type, int id) {
 
 ObjType GetObjTypeOfClass(ObjClass class) {
     switch(class) {
+
         case OC_STARTSCREEN_UI_TITLE_TEXT:
             return OBJ_UI_TEXT;
+        
         case OC_STARTSCREEN_UI_START_BUTTON:
-            return OBJ_UI_BUTTON;
         case OC_STARTSCREEN_UI_SETTINGS_BUTTON:
-            return OBJ_UI_BUTTON;
-        case OC_GAMEPLAY_ENTITY_PLAYER:
-            return OBJ_ENTITY_PLAYER;
-        case OC_GAMEPLAY_ENTITY_ENEMY_BASIC:
-            return OBJ_ENTITY_ENEMY;
-        case OC_GAMEPLAY_ENTITY_BULLET_BASIC:
-            return OBJ_ENTITY_BULLET;
-        case OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC:
-            return OBJ_TIMER;
-        case OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC:
-            return OBJ_TIMER;
-        case OC_GAMEPLAY_UI_HEALTHBAR:
-            return OBJ_UI_HEALTHBAR;
         case OC_ENDSCREEN_UI_RESTART_BUTTON:
             return OBJ_UI_BUTTON;
+        
+        case OC_GAMEPLAY_ENTITY_PLAYER:
+            return OBJ_ENTITY_PLAYER;
+        
+        case OC_GAMEPLAY_ENTITY_ENEMY_BASIC:
+            return OBJ_ENTITY_ENEMY;
+        
+        case OC_GAMEPLAY_ENTITY_BULLET_BASIC:
+            return OBJ_ENTITY_BULLET;
+        
+        case OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC:
+        case OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC:
+            return OBJ_TIMER;
+        
+        case OC_GAMEPLAY_UI_HEALTHBAR:
+            return OBJ_UI_HEALTHBAR;
+            
         default:
             // ???
     }
