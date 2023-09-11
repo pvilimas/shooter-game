@@ -49,7 +49,9 @@ void DeleteObjects() {
     }
 }
 
-Object* CreateObject(ObjType type) {
+Object* CreateObject(ObjClass class) {
+    ObjType type = GetObjTypeOfClass(class);
+
     // find first open slot
     int id;
     for (id = 0; id < OBJ_SLOT_COUNT && game.objects[type][id].active; id++);
@@ -58,19 +60,78 @@ Object* CreateObject(ObjType type) {
         .active = true,
         .id = id,
         .type = type,
+        .class = class,
         .data = {}
     };
-    switch(type) {
-    case OBJ_TIMER:
+
+    // init type data - just update and render funcs
+
+    if (type == OBJ_TIMER) {
         o.update = ObjUpdateTimerCallback;
         o.render = NULL;
-        o.data.tm_data = (TimerObjData) {
-            .last_recorded = GetTime()
-        };
-        break;
-    case OBJ_ENTITY_PLAYER:
+    } else if (type == OBJ_ENTITY_PLAYER) {
         o.update = ObjUpdatePlayerCallback;
         o.render = ObjRenderPlayerCallback;
+    } else if (type == OBJ_ENTITY_ENEMY) {
+        o.update = ObjUpdateEnemyCallback;
+        o.render = ObjRenderEnemyCallback;
+    } else if (type == OBJ_ENTITY_BULLET) {
+        o.update = ObjUpdateBulletCallback;
+        o.render = ObjRenderBulletCallback;
+    } else if (type == OBJ_UI_TEXT) {
+        o.update = NULL;
+        o.render = ObjRenderTextCallback;
+    } else if (type == OBJ_UI_BUTTON) {
+        o.update = ObjUpdateButtonCallback;
+        o.render = ObjRenderButtonCallback;
+    } else if (type == OBJ_UI_HEALTHBAR) {
+        o.update = NULL;
+        o.render = ObjRenderHealthbarCallback;
+    } else {
+        // ???
+    }
+
+    // init class data - everything else
+
+    if (class == OC_STARTSCREEN_UI_TITLE_TEXT) {
+        o.data.ui_data = (UIObjData) {
+            .pos = (Vector2) { (game.screen_size.x / 2) - 100,
+                (game.screen_size.y / 2) - 200},
+            .size = (Vector2) { 200, 30 },
+            .color1 = BLACK,
+            .label = "Shooter Game",
+            .font_size = 20,
+            .callback = NULL
+        };
+    } else if (class == OC_STARTSCREEN_UI_START_BUTTON) {
+        o.data.ui_data = (UIObjData) {
+            .pos = (Vector2){ (game.screen_size.x / 2) - 100,
+                (game.screen_size.y / 2) + 200 },
+            .size = (Vector2) { 200, 50 },
+            .color1 = (Color) { 200, 200, 210, 255 },
+            .color2 = (Color) { 150, 150, 160, 255 },
+            .color3 = (Color) { 170, 170, 180, 255 },
+            .color4 = (Color) { 120, 120, 150, 255 },
+            .color5 = (Color) { 160, 160, 170, 255 },
+            .label = "Start",
+            .font_size = 20,
+            .callback = BtnStartCallback
+        };
+    } else if (class == OC_STARTSCREEN_UI_SETTINGS_BUTTON) {
+        o.data.ui_data = (UIObjData) {
+            .pos = (Vector2){ (game.screen_size.x / 2) - 100,
+                (game.screen_size.y / 2) + 275 },
+            .size = (Vector2) { 200, 50 },
+            .color1 = (Color) { 200, 200, 210, 255 },
+            .color2 = (Color) { 150, 150, 160, 255 },
+            .color3 = (Color) { 170, 170, 180, 255 },
+            .color4 = (Color) { 120, 120, 150, 255 },
+            .color5 = (Color) { 160, 160, 170, 255 },
+            .label = "Settings",
+            .font_size = 20,
+            .callback = BtnSettingsCallback
+        };
+    } else if (class == OC_GAMEPLAY_ENTITY_PLAYER) {
         o.data.ent_data = (EntityObjData) {
             .speed = 2,
             .max_health = 100,
@@ -78,10 +139,7 @@ Object* CreateObject(ObjType type) {
             .damage = 0,
             .hitbox_radius = 5
         };
-        break;
-    case OBJ_ENTITY_ENEMY:
-        o.update = ObjUpdateEnemyCallback;
-        o.render = ObjRenderEnemyCallback;
+    } else if (class == OC_GAMEPLAY_ENTITY_ENEMY_BASIC) {
         o.data.ent_data = (EntityObjData) {
             .speed = 1,
             .max_health = 20,
@@ -89,37 +147,47 @@ Object* CreateObject(ObjType type) {
             .damage = 20,
             .hitbox_radius = 25
         };
-        break;
-    case OBJ_ENTITY_BULLET:
-        o.update = ObjUpdateBulletCallback;
-        o.render = ObjRenderBulletCallback;
+    } else if (class == OC_GAMEPLAY_ENTITY_BULLET_BASIC) {
         o.data.ent_data = (EntityObjData) {
             .speed = 10,
             .damage = 10,
             .hitbox_radius = 10,
             .lifetime = 30
         };
-        break;
-    case OBJ_UI_TEXT:
-        o.update = NULL;
-        o.render = ObjRenderTextCallback;
-        break;
-    case OBJ_UI_BUTTON:
-        o.update = ObjUpdateButtonCallback;
-        o.render = ObjRenderButtonCallback;
-        o.data.ui_data = (UIObjData) {
-            .label = "",
-            .callback = NULL
+    } else if (class == OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC) {
+        o.data.tm_data = (TimerObjData) {
+            .last_recorded = GetTime(),
+            .callback = PlayerShootAtMouseCallback,
+            .interval = 2.0,
+            .num_triggers = -1
         };
-        break;
-    case OBJ_UI_HEALTHBAR:
-        o.update = NULL;
-        o.render = ObjRenderHealthbarCallback;
+    } else if (class == OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC) {
+        o.data.tm_data = (TimerObjData) {
+            .last_recorded = GetTime(),
+            .callback = SpawnEnemyCallback,
+            .interval = 0.1,
+            .num_triggers = -1
+        };
+    } else if (class == OC_GAMEPLAY_UI_HEALTHBAR) {
         o.data.ui_data = (UIObjData) {
             .pos = {20, 20},
             .size = {200, 43}
         };
-        break;
+    } else if (OC_STARTSCREEN_UI_START_BUTTON) {
+        o.data.ui_data = (UIObjData) {
+            .pos = (Vector2){(game.screen_size.x / 2) - 100,
+                (game.screen_size.y / 2) - 25},
+            .size = (Vector2) { 200, 50 },
+            .color1 = (Color) { 200, 200, 200, 255 },
+            .color2 = (Color) { 150, 150, 150, 255 },
+            .color3 = (Color) { 170, 170, 170, 255 },
+            .color4 = (Color) { 120, 120, 120, 255 },
+            .color5 = (Color) { 160, 160, 160, 255 },
+            .callback = BtnRestartCallback,
+            .label = "Restart"
+        };
+    } else {
+        // ???
     }
 
     // insert into first available slot
@@ -135,6 +203,33 @@ Object* GetObject(ObjType type, int id) {
 void DeleteObject(ObjType type, int id) {
     game.objects[type][id].active = false;
     // now next time an object gets added it will overwrite this slot
+}
+
+ObjType GetObjTypeOfClass(ObjClass class) {
+    switch(class) {
+        case OC_STARTSCREEN_UI_TITLE_TEXT:
+            return OBJ_UI_TEXT;
+        case OC_STARTSCREEN_UI_START_BUTTON:
+            return OBJ_UI_BUTTON;
+        case OC_STARTSCREEN_UI_SETTINGS_BUTTON:
+            return OBJ_UI_BUTTON;
+        case OC_GAMEPLAY_ENTITY_PLAYER:
+            return OBJ_ENTITY_PLAYER;
+        case OC_GAMEPLAY_ENTITY_ENEMY_BASIC:
+            return OBJ_ENTITY_ENEMY;
+        case OC_GAMEPLAY_ENTITY_BULLET_BASIC:
+            return OBJ_ENTITY_BULLET;
+        case OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC:
+            return OBJ_TIMER;
+        case OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC:
+            return OBJ_TIMER;
+        case OC_GAMEPLAY_UI_HEALTHBAR:
+            return OBJ_UI_HEALTHBAR;
+        case OC_ENDSCREEN_UI_RESTART_BUTTON:
+            return OBJ_UI_BUTTON;
+        default:
+            // ???
+    }
 }
 
 #endif // OBJECT_C

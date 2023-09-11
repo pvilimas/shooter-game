@@ -31,6 +31,7 @@ typedef enum {
 
 #define OBJ_SLOT_COUNT 1000
 
+// object type
 typedef enum {
     OBJ_TIMER,
 
@@ -44,6 +45,25 @@ typedef enum {
 
     OBJ_TYPE_COUNT
 } ObjType;
+
+// object class - like a subtype
+// naming scheme: OC_<SCENE>_<TYPE>_<NAME>
+typedef enum {
+    OC_STARTSCREEN_UI_TITLE_TEXT,
+    OC_STARTSCREEN_UI_START_BUTTON,
+    OC_STARTSCREEN_UI_SETTINGS_BUTTON,
+
+    OC_GAMEPLAY_ENTITY_PLAYER,
+    OC_GAMEPLAY_ENTITY_ENEMY_BASIC,
+    OC_GAMEPLAY_ENTITY_BULLET_BASIC,
+    OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC,
+    OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC,
+    OC_GAMEPLAY_UI_HEALTHBAR,
+    
+    OC_ENDSCREEN_UI_RESTART_BUTTON,
+
+    OC_COUNT
+} ObjClass;
 
 // the type of object.update and object.render
 // object is passed through a voidptr
@@ -106,13 +126,14 @@ typedef union {
 typedef struct {
     int         id;         // local to each sublist
     ObjType     type;
+    ObjClass    class;
     bool        active;     // if false it's empty
     ObjCallback update;
     ObjCallback render;
     ObjData     data;
 } Object;
 
-// game class
+// game type
 
 typedef struct {
     Vector2     screen_size;

@@ -48,9 +48,9 @@ void LoadScene(Scene new_scene) {
 }
 
 void LoadSceneStartScreen() {
-    CREATE_OBJ_STARTSCREEN_TITLE_TEXT();
-    CREATE_OBJ_STARTSCREEN_START_BUTTON();
-    CREATE_OBJ_STARTSCREEN_SETTINGS_BUTTON();
+    CreateObject(OC_STARTSCREEN_UI_TITLE_TEXT);
+    CreateObject(OC_STARTSCREEN_UI_START_BUTTON);
+    CreateObject(OC_STARTSCREEN_UI_SETTINGS_BUTTON);
 }
 
 void LoadSceneSettings() {
@@ -61,18 +61,18 @@ void LoadSceneGameplay() {
 
     // create objects for gameplay - player, timers, ui
 
-    CREATE_OBJ_GAMEPLAY_PLAYER();
-    CREATE_OBJ_GAMEPLAY_UI_HEALTHBAR();
+    CreateObject(OC_GAMEPLAY_ENTITY_PLAYER);
+    CreateObject(OC_GAMEPLAY_UI_HEALTHBAR);
 
     // timer: shoot basic bullets
-    CREATE_OBJ_GAMEPLAY_TIMER_PLAYER_SHOOT_BASIC();
+    CreateObject(OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC);
 
     // timer: spawn normal enemies
-    CREATE_OBJ_GAMEPLAY_TIMER_SPAWN_BASIC();
+    CreateObject(OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC);
 }
 
 void LoadSceneEndScreen() {
-    CREATE_OBJ_ENDSCREEN_RESTART_BUTTON();
+    CreateObject(OC_ENDSCREEN_UI_RESTART_BUTTON);
 }
 
 void DrawSceneStartScreen() {

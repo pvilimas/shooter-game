@@ -21,7 +21,7 @@ void PlayerShootAtMouseCallback() {
     double angle = atan2(dy, dx);
 
     for (int i = 0; i < 5; i++) {
-        Object* o = CreateObject(OBJ_ENTITY_BULLET);
+        Object* o = CreateObject(OC_GAMEPLAY_ENTITY_BULLET_BASIC);
         o->data.ent_data.pos = game.player->data.ent_data.pos;
         o->data.ent_data.angle = RandFloat(angle - 0.125, angle + 0.125);
     }
@@ -46,7 +46,7 @@ void SpawnEnemyCallback() {
     int dy = game.player->data.ent_data.pos.y - pos.y;
     double angle = atan2(dy, dx);
     
-    Object* o = CreateObject(OBJ_ENTITY_ENEMY);
+    Object* o = CreateObject(OC_GAMEPLAY_ENTITY_ENEMY_BASIC);
     o->data.ent_data.pos = pos;
     o->data.ent_data.angle = angle;
 }

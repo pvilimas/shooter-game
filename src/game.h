@@ -2,7 +2,6 @@
 #define GAME_H
 
 #include "types.h"
-#include "objdata.h"
 
 /*
     TODO
@@ -66,9 +65,11 @@ void        UpdateObjects();
 void        RenderObjects();
 void        DeleteObjects();
 
-Object*     CreateObject(ObjType type);
+Object*     CreateObject(ObjClass class);
 Object*     GetObject(ObjType type, int id);
 void        DeleteObject(ObjType type, int id);
+
+ObjType     GetObjTypeOfClass(ObjClass class);
 
 // assets.c
 void        UnloadAssets();
