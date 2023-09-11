@@ -51,6 +51,7 @@ void LoadSceneStartScreen() {
     CreateObject(OC_STARTSCREEN_UI_TITLE_TEXT);
     CreateObject(OC_STARTSCREEN_UI_START_BUTTON);
     CreateObject(OC_STARTSCREEN_UI_SETTINGS_BUTTON);
+    CreateObject(OC_STARTSCREEN_UI_QUIT_BUTTON);
 }
 
 void LoadSceneSettings() {
@@ -61,7 +62,7 @@ void LoadSceneGameplay() {
 
     // create objects for gameplay - player, timers, ui
 
-    CreateObject(OC_GAMEPLAY_ENTITY_PLAYER);
+    game.player = CreateObject(OC_GAMEPLAY_ENTITY_PLAYER);
     CreateObject(OC_GAMEPLAY_UI_HEALTHBAR);
 
     // timer: shoot basic bullets

@@ -29,7 +29,7 @@ void RenderObjects() {
     for (int type = 0; type < OBJ_TYPE_COUNT; type++) {
         for (int i = 0; i < OBJ_SLOT_COUNT; i++) {
             Object* o = GetObject(type, i);
-
+  
             // skip if unloaded or render = NULL
             if (!o->active || !o->render) {
                 continue;
@@ -88,7 +88,7 @@ Object* CreateObject(ObjClass class) {
         o.update = NULL;
         o.render = ObjRenderHealthbarCallback;
     } else {
-        // ???
+        printf("update CreateObject type data - L%d (object.c)\n", __LINE__);
     }
 
     // init class data - everything else
@@ -97,10 +97,10 @@ Object* CreateObject(ObjClass class) {
         o.data.ui_data = (UIObjData) {
             .pos = (Vector2) { (game.screen_size.x / 2) - 100,
                 (game.screen_size.y / 2) - 200},
-            .size = (Vector2) { 200, 30 },
+            .size = (Vector2) { 200, 50 },
             .color1 = BLACK,
             .label = "Shooter Game",
-            .font_size = 20,
+            .font_size = 50,
             .callback = NULL
         };
     } else if (class == OC_STARTSCREEN_UI_START_BUTTON) {
@@ -131,6 +131,20 @@ Object* CreateObject(ObjClass class) {
             .font_size = 20,
             .callback = BtnSettingsCallback
         };
+    } else if (class == OC_STARTSCREEN_UI_QUIT_BUTTON) {
+        o.data.ui_data = (UIObjData) {
+            .pos = (Vector2){ (game.screen_size.x / 2) - 100,
+                (game.screen_size.y / 2) + 350 },
+            .size = (Vector2) { 200, 50 },
+            .color1 = (Color) { 200, 200, 210, 255 },
+            .color2 = (Color) { 150, 150, 160, 255 },
+            .color3 = (Color) { 170, 170, 180, 255 },
+            .color4 = (Color) { 120, 120, 150, 255 },
+            .color5 = (Color) { 160, 160, 170, 255 },
+            .label = "Quit",
+            .font_size = 20,
+            .callback = BtnQuitCallback
+        };
     } else if (class == OC_GAMEPLAY_ENTITY_PLAYER) {
         o.data.ent_data = (EntityObjData) {
             .speed = 2,
@@ -157,14 +171,14 @@ Object* CreateObject(ObjClass class) {
     } else if (class == OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC) {
         o.data.tm_data = (TimerObjData) {
             .last_recorded = GetTime(),
-            .callback = PlayerShootAtMouseCallback,
+            .callback = TimerPlayerShootBasicBulletCallback,
             .interval = 2.0,
             .num_triggers = -1
         };
     } else if (class == OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC) {
         o.data.tm_data = (TimerObjData) {
             .last_recorded = GetTime(),
-            .callback = SpawnEnemyCallback,
+            .callback = TimerSpawnBasicEnemyCallback,
             .interval = 0.1,
             .num_triggers = -1
         };
@@ -187,7 +201,7 @@ Object* CreateObject(ObjClass class) {
             .label = "Restart"
         };
     } else {
-        // ???
+        printf("update CreateObject class data - L%d (object.c)\n", __LINE__);
     }
 
     // insert into first available slot
@@ -213,6 +227,7 @@ ObjType GetObjTypeOfClass(ObjClass class) {
         
         case OC_STARTSCREEN_UI_START_BUTTON:
         case OC_STARTSCREEN_UI_SETTINGS_BUTTON:
+        case OC_STARTSCREEN_UI_QUIT_BUTTON:
         case OC_ENDSCREEN_UI_RESTART_BUTTON:
             return OBJ_UI_BUTTON;
         
@@ -233,7 +248,8 @@ ObjType GetObjTypeOfClass(ObjClass class) {
             return OBJ_UI_HEALTHBAR;
             
         default:
-            // ???
+            printf("update GetObjTypeOfClass - L%d (object.c)\n", __LINE__);
+            return -1;
     }
 }
 

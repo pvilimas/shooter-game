@@ -43,3 +43,12 @@ int RandInt(int min, int max) {
 float RandFloat(float min, float max) {
     return min + (float)rand() / ((float)(RAND_MAX / (max-min)));
 }
+
+// if (PercentChance(33.3)) {...}
+bool PercentChance(float percent) {
+    if (percent < 0.0f || percent > 100.0f) {
+        return false;
+    }
+
+    return (float)rand() / (float)RAND_MAX * 100.0f <= percent;
+}

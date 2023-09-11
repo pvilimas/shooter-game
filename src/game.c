@@ -23,11 +23,11 @@ void Init() {
 
     // init textures and fonts
     game.textures = g_hash_table_new_full(g_str_hash, g_str_equal,
-        NULL, FreeTextureCallback);
+        NULL, MemFreeTextureCallback);
     game.fonts = g_hash_table_new_full(g_str_hash, g_str_equal,
-        NULL, FreeFontCallback);
+        NULL, MemFreeFontCallback);
 
-    CreateTexture("background", "assets/bg.png");
+    CreateTexture("background", "assets/bg_new_new.png");
 
     game.frame_count = 0;
     game.screen_size = (Vector2) {
@@ -62,14 +62,17 @@ void Draw() {
 void Quit() {
     // raylib cleanup functions run here
     UnloadAssets();
+    exit(0);
 }
 
 void TileBackground() {
     Texture2D bg_texture = *GetTexture("background");
-    int i0 = ((game.player->data.ent_data.pos.x - game.screen_size.x/2) / bg_texture.width) - 5;
-    int i1 = ((game.player->data.ent_data.pos.x + game.screen_size.x/2) / bg_texture.width) + 5;
-    int j0 = ((game.player->data.ent_data.pos.y - game.screen_size.y/2) / bg_texture.height) - 5;
-    int j1 = ((game.player->data.ent_data.pos.y + game.screen_size.y/2) / bg_texture.height) + 5;
+    int x = game.player->data.ent_data.pos.x;
+    int y = game.player->data.ent_data.pos.y;
+    int i0 = ((x - game.screen_size.x/2) / bg_texture.width) - 5;
+    int i1 = ((x + game.screen_size.x/2) / bg_texture.width) + 5;
+    int j0 = ((y - game.screen_size.y/2) / bg_texture.height) - 5;
+    int j1 = ((y + game.screen_size.y/2) / bg_texture.height) + 5;
 
     ClearBackground(RAYWHITE);
     for (int i = i0; i < i1; i++) {

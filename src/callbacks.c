@@ -4,17 +4,17 @@ void TestCallback() {
     printf("test\n");
 }
 
-void FreeTextureCallback(void* texture) {
+void MemFreeTextureCallback(void* texture) {
     UnloadTexture(*(Texture2D*)texture);
     free(texture);
 }
 
-void FreeFontCallback(void* font) {
+void MemFreeFontCallback(void* font) {
     UnloadFont(*(Font*)font);
     free(font);
 }
 
-void PlayerShootAtMouseCallback() {
+void TimerPlayerShootBasicBulletCallback() {
     Vector2 abs_mouse_pos = GetAbsMousePosition();
     int dx = abs_mouse_pos.x - game.player->data.ent_data.pos.x;
     int dy = abs_mouse_pos.y - game.player->data.ent_data.pos.y;
@@ -27,7 +27,7 @@ void PlayerShootAtMouseCallback() {
     }
 }
 
-void SpawnEnemyCallback() {
+void TimerSpawnBasicEnemyCallback() {
     int enemy_spawn_radius = sqrt(2 * (pow(game.screen_size.x, 2) + pow(game.screen_size.y, 2)));
     Vector2 camera_offset = GetCameraOffset();
     Vector2 pos = {
@@ -234,7 +234,6 @@ void ObjUpdateButtonCallback(void* obj) {
 
     // click button
     if (mouse_is_hovering && mouse_is_pressed) {
-        printf("asioduasd\n");
         bdata->callback();
     }
 }
@@ -327,4 +326,8 @@ void BtnSettingsCallback() {
 
 void BtnRestartCallback() {
     LoadScene(SCENE_GAMEPLAY);
+}
+
+void BtnQuitCallback() {
+    Quit();
 }

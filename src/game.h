@@ -6,7 +6,6 @@
 /*
     TODO
     - start screen
-        - add title
         - add quit button
         - add settings button/menu (leave it empty for now)
     - gameplay
@@ -59,6 +58,7 @@ bool        PointOnScreen(Vector2 p);
 bool        PointNearScreen(Vector2 p, float range);
 int         RandInt(int min, int max);
 float       RandFloat(float min, float max);
+bool        PercentChance(float percent);
 
 // object.c
 void        UpdateObjects();
@@ -85,36 +85,27 @@ void        DeleteFont(char* name);
 // callbacks.c
 void        TestCallback();
 
-// glib/memory
+void        MemFreeTextureCallback(void* texture);
+void        MemFreeFontCallback(void* font);
 
-void        FreeTextureCallback(void* texture);
-void        FreeFontCallback(void* font);
-
-// timer
-
-void        PlayerShootAtMouseCallback();
-void        SpawnEnemyCallback();
-
-// object
+void        TimerPlayerShootBasicBulletCallback();
+void        TimerSpawnBasicEnemyCallback();
 
 void        ObjUpdateTimerCallback(void* obj);
-
 void        ObjUpdatePlayerCallback(void* obj);
 void        ObjRenderPlayerCallback(void* obj);
 void        ObjUpdateEnemyCallback(void* obj);
 void        ObjRenderEnemyCallback(void* obj);
 void        ObjUpdateBulletCallback(void* obj);
 void        ObjRenderBulletCallback(void* obj);
-
 void        ObjRenderTextCallback(void* obj);
 void        ObjUpdateButtonCallback(void* obj);
 void        ObjRenderButtonCallback(void* obj);
 void        ObjRenderHealthbarCallback(void* obj);
 
-// button/ui
-
 void        BtnStartCallback();
 void        BtnSettingsCallback();
 void        BtnRestartCallback();
+void        BtnQuitCallback();
 
 #endif // GAME_H
