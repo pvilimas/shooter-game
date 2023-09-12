@@ -71,88 +71,63 @@ typedef enum {
 // the type of object.update and object.render
 // object is passed through a voidptr
 typedef void (*ObjCallback)(void* object);
-
-// timer object
-
 typedef void (*TimerCallback)();
-typedef struct {
-    double          interval;
-    int             num_triggers; // -1 = inf
-    TimerCallback   callback;
-    double          last_recorded;
-} TimerObjData;
-
-// entity object
-
-typedef struct {
-    Vector2     pos;
-    int         speed;
-    float       angle;
-    int         max_health;
-    int         health;
-    int         damage;
-    int         iframes;
-    int         lifetime;
-    int         hitbox_radius;
-} EntityObjData;
-
-// ui object
-
 typedef void (*UICallback)();
-typedef struct {
-    Vector2 pos;
-    Vector2 size;
-
-    // from most to least used
-
-    Color color1;
-    Color color2;
-    Color color3;
-    Color color4;
-    Color color5;
-
-    const char* label;
-    int font_size;
-    
-    UICallback callback;        // on-click function
-} UIObjData;
-
-// object
-
-typedef union {
-    TimerObjData    tm_data;
-    EntityObjData   ent_data;
-    UIObjData       ui_data;
-} ObjData;
 
 // a game object
 typedef struct {
-    int         id;         // local to each sublist
-    ObjType     type;
-    ObjClass    class;
-    bool        active;     // if false it's empty
-    ObjCallback update;
-    ObjCallback render;
-    ObjData     data;
+    int             id;         // local to each sublist
+    ObjType         type;
+    ObjClass        class;
+    bool            active;     // if false it's empty
+
+    ObjCallback     update;
+    ObjCallback     render;
+
+    // data
+
+    Vector2         pos;
+    Vector2         size;
+
+    double          timer_interval;
+    double          timer_num_triggers;     // -1 = inf
+    TimerCallback   timer_callback;
+    double          timer_last_recorded;
+
+    int             entity_speed;
+    float           entity_angle;
+    int             entity_max_health;
+    int             entity_health;
+    int             entity_damage;
+    int             entity_iframes;
+    int             entity_lifetime;
+    Shape           entity_hitbox;
+
+    Color           ui_colors[10];
+    const char*     ui_text;
+    int             ui_font_size;
+    UICallback      ui_callback;            // on-click function
 } Object;
 
 // game type
 
 typedef struct {
-    Vector2     screen_size;
-    Camera2D    camera;
-    Object*     player;
+    Vector2         screen_size;
+    Camera2D        camera;
+    Object*         player;
 
-    Scene       current_scene;
-    int         frame_count;            // increment every frame
-    double      gameplay_time_elapsed;  // since user clicked start (sec)
+    bool            paused;
+    Scene           current_scene;
+    int             frame_count;            // increment every frame
+    double          gameplay_time_elapsed;  // since user clicked start (sec)
 
-    GHashTable* textures;               // <cchar*, Texture2D*>
-    GHashTable* fonts;                  // <cchar*, Font*>
+    GHashTable*     textures;               // <cchar*, Texture2D*>
+    GHashTable*     fonts;                  // <cchar*, Font*>
 
-    Object      objects[OBJ_TYPE_COUNT][OBJ_SLOT_COUNT];
-    char        buffer[1000];           // a buffer to use for storing stuff
+    RenderTexture   render_texture;         // for pause screen backdrop
 
+    Object          objects[OBJ_TYPE_COUNT][OBJ_SLOT_COUNT];
+    char            buffer[1000];
 } Game;
 
 // global instance of the game

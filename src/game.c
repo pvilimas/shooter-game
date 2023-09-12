@@ -20,6 +20,7 @@ void Config() {
 // set up the game
 void Init() {
     game.current_scene = SCENE_STARTUP;
+    game.paused = false;
 
     // init textures and fonts
     game.textures = g_hash_table_new_full(g_str_hash, g_str_equal,
@@ -74,8 +75,8 @@ void Quit() {
 
 void TileBackground() {
     Texture2D bg_texture = *GetTexture("background");
-    int x = game.player->data.ent_data.pos.x;
-    int y = game.player->data.ent_data.pos.y;
+    int x = game.player->pos.x;
+    int y = game.player->pos.y;
     int i0 = ((x - game.screen_size.x/2) / bg_texture.width) - 5;
     int i1 = ((x + game.screen_size.x/2) / bg_texture.width) + 5;
     int j0 = ((y - game.screen_size.y/2) / bg_texture.height) - 5;

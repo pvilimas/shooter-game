@@ -5,8 +5,12 @@
 
 /*
     TODO
-    - gameplay
-        - pause menu
+    - rewrite object struct to not use unions
+    - start handling resolutions
+    - pause menu
+            - make game draw to rendertexture the size of th screen
+    - add keybind objects with callbacks
+    - debug mode
 
     - find fonts
     - start adding different types of enemies and bullets, maybe 5 of each
@@ -26,6 +30,9 @@ void        Config();
 void        Init();
 void        Draw();
 void        Quit();
+
+void        Pause();
+void        Unpause();
 
 void        TileBackground();
 void        KillPlayer();

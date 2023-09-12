@@ -96,29 +96,51 @@ Object* CreateObject(ObjClass class) {
     // init class data - everything else
 
     if (class == OC_STARTSCREEN_UI_TITLE_TEXT) {
-        o.data.ui_data = (UIObjData) {
-            .pos = (Vector2) { (game.screen_size.x / 2) - 100,
-                (game.screen_size.y / 2) - 200},
-            .size = (Vector2) { 200, 50 },
-            .color1 = BLACK,
-            .label = "Shooter Game",
-            .font_size = 50,
-            .callback = NULL
-        };
+        o.pos = (Vector2) { (game.screen_size.x / 2) - 100;
+                (game.screen_size.y / 2) - 200};
+        o.size = (Vector2) { 200, 50 };
+        o.ui_colors[0] = BLACK;
+        o.ui_text = "Shooter Game";
+        o.ui_font_size = 50;
+        o.ui_callback = NULL;
     } else if (class == OC_STARTSCREEN_UI_START_BUTTON) {
-        o.data.ui_data = (UIObjData) {
-            .pos = (Vector2){ (game.screen_size.x / 2) - 100,
-                (game.screen_size.y / 2) + 200 },
-            .size = (Vector2) { 200, 50 },
-            .color1 = (Color) { 200, 200, 210, 255 },
-            .color2 = (Color) { 150, 150, 160, 255 },
-            .color3 = (Color) { 170, 170, 180, 255 },
-            .color4 = (Color) { 120, 120, 150, 255 },
-            .color5 = (Color) { 160, 160, 170, 255 },
-            .label = "Start",
-            .font_size = 20,
-            .callback = BtnStartCallback
+        o.pos = (Vector2){ (game.screen_size.x / 2) - 100,
+                (game.screen_size.y / 2) + 200 };
+        o.size = (Vector2) { 200, 50 };
+        o.ui_colors = (Color[]) {
+            [0] = (Color) { 200, 200, 210, 255 },
+            [1] = (Color) { 150, 150, 160, 255 },
+            [2] = (Color) { 170, 170, 180, 255 },
+            [3] = (Color) { 120, 120, 150, 255 },
+            [4] = (Color) { 160, 160, 170, 255 }
         };
+        o.ui_label = "Start";
+        o.ui_font_size = 20;
+        o.ui_callback = BtnStartCallback;
+
+/* editing this part i'm editing this part i'm editing this part i'm editing 
+this part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part i'm editing this part i'm editing this part i'm 
+editing this part i'm editing this part i'm editing this part i'm editing this 
+part i'm editing this part */
+        
     } else if (class == OC_STARTSCREEN_UI_SETTINGS_BUTTON) {
         o.data.ui_data = (UIObjData) {
             .pos = (Vector2){ (game.screen_size.x / 2) - 100,
