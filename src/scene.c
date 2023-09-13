@@ -97,7 +97,8 @@ void DrawSceneSettings() {
 
 void DrawSceneGameplay() {
     // update camera target to player
-    game.camera.target = game.player->data.ent_data.pos;
+    game.camera.target = game.player->pos;
+   
 
     BeginDrawing();
         BeginMode2D(game.camera);
@@ -115,6 +116,7 @@ void DrawSceneGameplay() {
     EndDrawing();
     game.frame_count++;
     game.gameplay_time_elapsed += (double) GetFrameTime();
+   
 }
 
 void DrawSceneEndScreen() {

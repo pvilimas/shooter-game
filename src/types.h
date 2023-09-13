@@ -17,6 +17,14 @@
 #define DEBUG printf("\t%s: %d\n", __FILE__, __LINE__)
 #define DEBUGGING 1
 
+typedef void (*KeybindCallback)();
+
+typedef struct {
+    const char*     name;
+    int             key_code;
+    KeybindCallback callback;
+} Keybind;
+
 typedef enum {
     SCENE_STARTUP,
     SCENE_STARTSCREEN,
@@ -33,15 +41,15 @@ typedef enum {
 
 // object type
 typedef enum {
-    OBJ_TIMER,
+    OBJ_TIMER = 0,
 
-    OBJ_ENTITY_PLAYER,
-    OBJ_ENTITY_ENEMY,
-    OBJ_ENTITY_BULLET,
+    OBJ_ENTITY_PLAYER = 1,
+    OBJ_ENTITY_ENEMY = 2,
+    OBJ_ENTITY_BULLET = 3,
     
-    OBJ_UI_TEXT,
-    OBJ_UI_BUTTON,
-    OBJ_UI_ELEMENT,
+    OBJ_UI_TEXT = 4,
+    OBJ_UI_BUTTON = 5,
+    OBJ_UI_ELEMENT = 6,
 
     OBJ_TYPE_COUNT
 } ObjType;
@@ -49,21 +57,21 @@ typedef enum {
 // object class - like a subtype
 // naming scheme: OC_<SCENE>_<TYPE>_<NAME>
 typedef enum {
-    OC_STARTSCREEN_UI_TITLE_TEXT,
-    OC_STARTSCREEN_UI_START_BUTTON,
-    OC_STARTSCREEN_UI_SETTINGS_BUTTON,
-    OC_STARTSCREEN_UI_QUIT_BUTTON,
+    OC_STARTSCREEN_UI_TITLE_TEXT = 0,
+    OC_STARTSCREEN_UI_START_BUTTON = 1,
+    OC_STARTSCREEN_UI_SETTINGS_BUTTON = 2,
+    OC_STARTSCREEN_UI_QUIT_BUTTON = 3,
 
-    OC_GAMEPLAY_ENTITY_PLAYER,
-    OC_GAMEPLAY_ENTITY_ENEMY_BASIC,
-    OC_GAMEPLAY_ENTITY_BULLET_BASIC,
-    OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC,
-    OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC,
-    OC_GAMEPLAY_UI_ELEMENT_HEALTHBAR,
-    OC_GAMEPLAY_UI_ELEMENT_GAME_TIMER,
+    OC_GAMEPLAY_ENTITY_PLAYER = 4,
+    OC_GAMEPLAY_ENTITY_ENEMY_BASIC = 5,
+    OC_GAMEPLAY_ENTITY_BULLET_BASIC = 6,
+    OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC = 7,
+    OC_GAMEPLAY_TIMER_SPAWN_ENEMY_BASIC = 8,
+    OC_GAMEPLAY_UI_ELEMENT_HEALTHBAR = 9,
+    OC_GAMEPLAY_UI_ELEMENT_GAME_TIMER = 10,
     
-    OC_ENDSCREEN_UI_ELEMENT_TIME_SURVIVED,
-    OC_ENDSCREEN_UI_RESTART_BUTTON,
+    OC_ENDSCREEN_UI_ELEMENT_TIME_SURVIVED = 11,
+    OC_ENDSCREEN_UI_RESTART_BUTTON = 12,
 
     OC_COUNT
 } ObjClass;
@@ -101,7 +109,7 @@ typedef struct {
     int             entity_damage;
     int             entity_iframes;
     int             entity_lifetime;
-    Shape           entity_hitbox;
+    int             entity_hitbox_radius;
 
     Color           ui_colors[10];
     const char*     ui_text;

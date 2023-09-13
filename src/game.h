@@ -5,7 +5,6 @@
 
 /*
     TODO
-    - rewrite object struct to not use unions
     - start handling resolutions
     - pause menu
             - make game draw to rendertexture the size of th screen
@@ -76,12 +75,20 @@ ObjType     GetObjTypeOfClass(ObjClass class);
 void        UnloadAssets();
 
 void        CreateTexture(char* name, const char* filepath);
-Texture2D*  GetTexture(char* name);
+Texture2D*  GetTexture(const char* name);
 void        DeleteTexture(char* name);
 
 void        CreateFont(char* name, const char* filepath);
-Font*       GetFont(char* name);
+Font*       GetFont(const char* name);
 void        DeleteFont(char* name);
+
+// keyinput.c
+
+void        HandleInput();
+
+void        CreateKeybind(const char* name, int key_code, KeybindCallback);
+void        RemapKeybind(const char* name, int new_code);
+void        DeleteKeybind(const char* name);
 
 // callbacks.c
 void        TestCallback();

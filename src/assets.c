@@ -18,7 +18,7 @@ void CreateTexture(char* name, const char* filepath) {
     g_hash_table_insert(game.textures, name, t);
 }
 
-Texture2D* GetTexture(char* name) {
+Texture2D* GetTexture(const char* name) {
     return g_hash_table_lookup(game.textures, name); // null if not found
 }
 
@@ -32,7 +32,7 @@ void CreateFont(char* name, const char* filepath) {
     g_hash_table_insert(game.fonts, name, f);
 }
 
-Font* GetFont(char* name) {
+Font* GetFont(const char* name) {
     return g_hash_table_lookup(game.fonts, name); // null if not found
 }
 
