@@ -13,6 +13,11 @@
     - fix in-game timer
     - proper hitboxes and collision shapes
         - shape type
+    - improve keybinds - split into ui and game keybinds
+        - game keybinds - queue, so if W is held then S is pressed,
+            player keeps moving up
+        - ui - can't really be remapped, maybe use IsKeyPressed not
+            Down
 
     - find fonts
     - start adding different types of enemies and bullets, maybe 5 of each
