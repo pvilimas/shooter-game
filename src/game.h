@@ -10,6 +10,9 @@
             - make game draw to rendertexture the size of th screen
     - add keybind objects with callbacks
     - debug mode
+    - fix in-game timer
+    - proper hitboxes and collision shapes
+        - shape type
 
     - find fonts
     - start adding different types of enemies and bullets, maybe 5 of each
@@ -22,6 +25,9 @@
     - make some pixel art instead of drawing primitives
         - animate them
     - resolution menu like terraria has
+    
+    ideas:
+    - camera damping/stays in front of player
 */
 
 // game.c
@@ -30,6 +36,7 @@ void        Init();
 void        Draw();
 void        Quit();
 
+// TODO
 void        Pause();
 void        Unpause();
 
@@ -74,20 +81,20 @@ ObjType     GetObjTypeOfClass(ObjClass class);
 // assets.c
 void        UnloadAssets();
 
-void        CreateTexture(char* name, const char* filepath);
+void        CreateTexture(const char* name, const char* filepath);
 Texture2D*  GetTexture(const char* name);
-void        DeleteTexture(char* name);
+void        DeleteTexture(const char* name);
 
-void        CreateFont(char* name, const char* filepath);
+void        CreateFont(const char* name, const char* filepath);
 Font*       GetFont(const char* name);
-void        DeleteFont(char* name);
+void        DeleteFont(const char* name);
 
 // keyinput.c
 
 void        HandleInput();
 
 void        CreateKeybind(const char* name, int key_code, KeybindCallback);
-void        RemapKeybind(const char* name, int new_code);
+void        RemapKeybind(const char* name, int new_key_code);
 void        DeleteKeybind(const char* name);
 
 // callbacks.c
@@ -117,5 +124,10 @@ void        BtnStartCallback();
 void        BtnSettingsCallback();
 void        BtnRestartCallback();
 void        BtnQuitCallback();
+
+void        KeybindMoveUpCallback();
+void        KeybindMoveDownCallback();
+void        KeybindMoveLeftCallback();
+void        KeybindMoveRightCallback();
 
 #endif // GAME_H

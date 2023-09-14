@@ -12,30 +12,30 @@ void UnloadAssets() {
     g_hash_table_destroy(game.fonts);
 }
 
-void CreateTexture(char* name, const char* filepath) {
+void CreateTexture(const char* name, const char* filepath) {
     Texture2D* t = malloc(sizeof(Texture2D));
     *t = LoadTexture(filepath);
-    g_hash_table_insert(game.textures, name, t);
+    g_hash_table_insert(game.textures, (char*)name, t);
 }
 
-Texture2D* GetTexture(const char* name) {
+Texture2D* GetTexture(const const char* name) {
     return g_hash_table_lookup(game.textures, name); // null if not found
 }
 
-void DeleteTexture(char* name) {
+void DeleteTexture(const char* name) {
     g_hash_table_remove(game.textures, name);
 }
 
-void CreateFont(char* name, const char* filepath) {
+void CreateFont(const char* name, const char* filepath) {
     Font* f = malloc(sizeof(Font));
     *f = LoadFont(filepath);
-    g_hash_table_insert(game.fonts, name, f);
+    g_hash_table_insert(game.fonts, (char*)name, f);
 }
 
 Font* GetFont(const char* name) {
     return g_hash_table_lookup(game.fonts, name); // null if not found
 }
 
-void DeleteFont(char* name) {
+void DeleteFont(const char* name) {
     g_hash_table_remove(game.fonts, name);
 }

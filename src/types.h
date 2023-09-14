@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <math.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -12,12 +13,15 @@
 #include "raylib.h"
 #include "raymath.h"
 
-#define WINDOW_TITLE "Shooter Game"
+#include "dev.h"
 
-#define DEBUG printf("\t%s: %d\n", __FILE__, __LINE__)
-#define DEBUGGING 1
+#define WINDOW_TITLE "Shooter Game"
+#define DEV_MODE true // see dev.c
 
 typedef void (*KeybindCallback)();
+typedef void (*ObjCallback)(void* object);
+typedef void (*TimerCallback)();
+typedef void (*UICallback)();
 
 typedef struct {
     const char*     name;
@@ -76,12 +80,6 @@ typedef enum {
     OC_COUNT
 } ObjClass;
 
-// the type of object.update and object.render
-// object is passed through a voidptr
-typedef void (*ObjCallback)(void* object);
-typedef void (*TimerCallback)();
-typedef void (*UICallback)();
-
 // a game object
 typedef struct {
     int             id;         // local to each sublist
@@ -131,6 +129,7 @@ typedef struct {
 
     GHashTable*     textures;               // <cchar*, Texture2D*>
     GHashTable*     fonts;                  // <cchar*, Font*>
+    GHashTable*     keybinds;               // <cchar*, Keybind*>
 
     RenderTexture   render_texture;         // for pause screen backdrop
 

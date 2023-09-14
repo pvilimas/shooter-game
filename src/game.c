@@ -11,7 +11,7 @@ void Config() {
     MaximizeWindow();
 
     // disable exit key when not debugging
-    if (!DEBUGGING) SetExitKey(0);
+    if (!DEV_MODE) SetExitKey(0);
     // for dev mode, make sure cwd is shooter-game not build
     ChangeDirectory("..");
     SetTargetFPS(60);
@@ -22,11 +22,13 @@ void Init() {
     game.current_scene = SCENE_STARTUP;
     game.paused = false;
 
-    // init textures and fonts
+    // init data structures
     game.textures = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, MemFreeTextureCallback);
     game.fonts = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, MemFreeFontCallback);
+    game.keybinds = g_hash_table_new_full(g_str_hash, g_str_equal,
+        NULL, free);
 
     // load assets
 
@@ -36,6 +38,11 @@ void Init() {
     CreateTexture("healthbar_4", "assets/healthbar_4.png");
     CreateTexture("healthbar_5", "assets/healthbar_5.png");
     CreateTexture("background", "assets/bg_new_new.png");
+
+    CreateKeybind("move up", KEY_W, KeybindMoveUpCallback);
+    CreateKeybind("move down", KEY_S, KeybindMoveDownCallback);
+    CreateKeybind("move left", KEY_A, KeybindMoveLeftCallback);
+    CreateKeybind("move right", KEY_D, KeybindMoveRightCallback);
 
     game.frame_count = 0;
     game.screen_size = (Vector2) {

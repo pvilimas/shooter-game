@@ -70,6 +70,13 @@ build CMakeFiles/shooter-game.dir/src/game.c.o: C_COMPILER__shooter-game_Debug /
   OBJECT_DIR = CMakeFiles/shooter-game.dir
   OBJECT_FILE_DIR = CMakeFiles/shooter-game.dir/src
 
+build CMakeFiles/shooter-game.dir/src/keyinput.c.o: C_COMPILER__shooter-game_Debug /home/paul/Programming/Games/shooter-game/src/keyinput.c || cmake_object_order_depends_target_shooter-game
+  DEP_FILE = CMakeFiles/shooter-game.dir/src/keyinput.c.o.d
+  FLAGS = -g -std=gnu11
+  INCLUDES = -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include
+  OBJECT_DIR = CMakeFiles/shooter-game.dir
+  OBJECT_FILE_DIR = CMakeFiles/shooter-game.dir/src
+
 build CMakeFiles/shooter-game.dir/src/main.c.o: C_COMPILER__shooter-game_Debug /home/paul/Programming/Games/shooter-game/src/main.c || cmake_object_order_depends_target_shooter-game
   DEP_FILE = CMakeFiles/shooter-game.dir/src/main.c.o.d
   FLAGS = -g -std=gnu11
@@ -106,7 +113,7 @@ build CMakeFiles/shooter-game.dir/src/utils.c.o: C_COMPILER__shooter-game_Debug 
 #############################################
 # Link the executable shooter-game
 
-build shooter-game: C_EXECUTABLE_LINKER__shooter-game_Debug CMakeFiles/shooter-game.dir/src/assets.c.o CMakeFiles/shooter-game.dir/src/callbacks.c.o CMakeFiles/shooter-game.dir/src/game.c.o CMakeFiles/shooter-game.dir/src/main.c.o CMakeFiles/shooter-game.dir/src/object.c.o CMakeFiles/shooter-game.dir/src/scene.c.o CMakeFiles/shooter-game.dir/src/utils.c.o
+build shooter-game: C_EXECUTABLE_LINKER__shooter-game_Debug CMakeFiles/shooter-game.dir/src/assets.c.o CMakeFiles/shooter-game.dir/src/callbacks.c.o CMakeFiles/shooter-game.dir/src/game.c.o CMakeFiles/shooter-game.dir/src/keyinput.c.o CMakeFiles/shooter-game.dir/src/main.c.o CMakeFiles/shooter-game.dir/src/object.c.o CMakeFiles/shooter-game.dir/src/scene.c.o CMakeFiles/shooter-game.dir/src/utils.c.o
   FLAGS = -g
   LINK_LIBRARIES = -lglib-2.0  -lraylib  -lm
   OBJECT_DIR = CMakeFiles/shooter-game.dir

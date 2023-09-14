@@ -11,6 +11,7 @@ add_executable(${PROJECT_NAME}
     src/assets.c
     src/callbacks.c
     src/game.c
+    src/keyinput.c
     src/main.c
     src/object.c
     src/scene.c

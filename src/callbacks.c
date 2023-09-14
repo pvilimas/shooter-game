@@ -80,19 +80,6 @@ void ObjUpdateTimerCallback(void* obj) {
 // OBJ_ENTITY_PLAYER
 
 void ObjUpdatePlayerCallback(void* obj) {
-    if (IsKeyDown(KEY_W)) {
-        game.player->pos.y -= 5;
-    }
-    if (IsKeyDown(KEY_A)) {
-        game.player->pos.x -= 5;
-    }
-    if (IsKeyDown(KEY_S)) {
-        game.player->pos.y += 5;
-    }
-    if (IsKeyDown(KEY_D)) {
-        game.player->pos.x += 5;
-    }
-
     if (game.player->entity_iframes != 0) {
         game.player->entity_iframes--;
     }
@@ -184,12 +171,12 @@ void ObjRenderBulletCallback(void* obj) {
     float s = sin(bullet->entity_angle);
 
     DrawLineEx(
-        (Vector2){ bullet->pos.x - c * 5, bullet->pos.y - s * 5 },
-        (Vector2){ bullet->pos.x + c * 5, bullet->pos.y + s * 5 },
+        (Vector2){ bullet->pos.x - c * 10, bullet->pos.y - s * 10 },
+        (Vector2){ bullet->pos.x + c * 10, bullet->pos.y + s * 10 },
         4.0f, BLACK);
     DrawLineEx(
-        (Vector2){ bullet->pos.x - c * 4, bullet->pos.y - s * 4 },
-        (Vector2){ bullet->pos.x + c * 4, bullet->pos.y + s * 4 },
+        (Vector2){ bullet->pos.x - c * 8, bullet->pos.y - s * 8 },
+        (Vector2){ bullet->pos.x + c * 8, bullet->pos.y + s * 8 },
         3.0f, WHITE);
 }
 
@@ -331,3 +318,22 @@ void BtnRestartCallback() {
 void BtnQuitCallback() {
     Quit();
 }
+
+// keybinds
+
+void KeybindMoveUpCallback() {
+    game.player->pos.y -= game.player->entity_speed;
+}
+
+void KeybindMoveDownCallback() {
+    game.player->pos.y += game.player->entity_speed;
+}
+
+void KeybindMoveLeftCallback() {
+    game.player->pos.x -= game.player->entity_speed;
+}
+
+void KeybindMoveRightCallback() {
+    game.player->pos.x += game.player->entity_speed;
+}
+

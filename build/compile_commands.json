@@ -16,6 +16,11 @@
 },
 {
   "directory": "/home/paul/Programming/Games/shooter-game/build",
+  "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/keyinput.c.o -c /home/paul/Programming/Games/shooter-game/src/keyinput.c",
+  "file": "/home/paul/Programming/Games/shooter-game/src/keyinput.c"
+},
+{
+  "directory": "/home/paul/Programming/Games/shooter-game/build",
   "command": "/usr/bin/gcc-12 -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -std=gnu11 -o CMakeFiles/shooter-game.dir/src/main.c.o -c /home/paul/Programming/Games/shooter-game/src/main.c",
   "file": "/home/paul/Programming/Games/shooter-game/src/main.c"
 },

@@ -98,7 +98,7 @@ void DrawSceneSettings() {
 void DrawSceneGameplay() {
     // update camera target to player
     game.camera.target = game.player->pos;
-   
+    HandleInput();
 
     BeginDrawing();
         BeginMode2D(game.camera);

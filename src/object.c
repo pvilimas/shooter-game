@@ -140,7 +140,7 @@ Object* CreateObject(ObjClass class) {
         o->ui_font_size = 20;
         o->ui_callback = BtnRestartCallback;
     } else if (class == OC_GAMEPLAY_ENTITY_PLAYER) {
-        o->entity_speed = 2;
+        o->entity_speed = 5;
         o->entity_max_health = 100;
         o->entity_health = 100;
         o->entity_damage = 0;
@@ -154,7 +154,7 @@ Object* CreateObject(ObjClass class) {
     } else if (class == OC_GAMEPLAY_ENTITY_BULLET_BASIC) {
         o->entity_speed = 10;
         o->entity_damage = 10;
-        o->entity_hitbox_radius = 10;
+        o->entity_hitbox_radius = 20;
         o->entity_lifetime = 30;
     } else if (class == OC_GAMEPLAY_TIMER_PLAYER_SHOOT_BULLET_BASIC) {
         o->timer_last_recorded = GetTime();
