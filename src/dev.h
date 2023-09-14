@@ -8,7 +8,8 @@
     full list of dev mode differences:
         - DevAssert, DevBreakpoint, and DevPrintf run
         - ESC quits the game
-        - 
+        - camera pos is labeled
+        - all hitboxes are drawn
 */
 
 

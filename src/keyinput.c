@@ -13,12 +13,14 @@ void HandleInput() {
     }
 }
 
-void CreateKeybind(const char* name, int key_code, KeybindCallback callback) {
+void CreateKeybind(const char* name, int key_code, KeybindCallback callback,
+    int delay_ms) {
     Keybind* k = malloc(sizeof(Keybind));
     *k = (Keybind) {
         .name = name,
         .key_code = key_code,
-        .callback = callback
+        .callback = callback,
+        .delay_ms = delay_ms
     };
     g_hash_table_insert(game.keybinds, (gpointer)name, (gpointer)k);
 }

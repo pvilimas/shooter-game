@@ -7,8 +7,11 @@ void Config() {
     SetTraceLogLevel(LOG_WARNING);
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
     InitWindow(GetScreenWidth(), GetScreenHeight(), WINDOW_TITLE);
-    // ToggleFullscreen();
     MaximizeWindow();
+    game.screen_size = (Vector2) {
+        GetMonitorWidth(game.current_monitor),
+        GetMonitorHeight(game.current_monitor)
+    };
 
     // disable exit key when not debugging
     if (!DEV_MODE) SetExitKey(0);
@@ -39,10 +42,11 @@ void Init() {
     CreateTexture("healthbar_5", "assets/healthbar_5.png");
     CreateTexture("background", "assets/bg_new_new.png");
 
-    CreateKeybind("move up", KEY_W, KeybindMoveUpCallback);
-    CreateKeybind("move down", KEY_S, KeybindMoveDownCallback);
-    CreateKeybind("move left", KEY_A, KeybindMoveLeftCallback);
-    CreateKeybind("move right", KEY_D, KeybindMoveRightCallback);
+    CreateKeybind("move up", KEY_W, KeybindMoveUpCallback, 0);
+    CreateKeybind("move down", KEY_S, KeybindMoveDownCallback, 0);
+    CreateKeybind("move left", KEY_A, KeybindMoveLeftCallback, 0);
+    CreateKeybind("move right", KEY_D, KeybindMoveRightCallback, 0);
+    CreateKeybind("toggle pause", KEY_P, KeybindTogglePauseCallback, 200);
 
     game.frame_count = 0;
     game.screen_size = (Vector2) {
@@ -58,6 +62,10 @@ void Init() {
         .zoom = 1.0f
     };
 
+    game.current_monitor = GetCurrentMonitor();
+    game.render_texture = LoadRenderTexture(game.screen_size.x,
+        game.screen_size.y);
+
     LoadScene(SCENE_STARTSCREEN);
 }
 
@@ -71,6 +79,7 @@ void Draw() {
         [SCENE_ENDSCREEN] = DrawSceneEndScreen
     };
 
+    if (WindowMovedToNewMonitor()) ResizeDisplayToMonitor();
     scene_draw_functions[game.current_scene]();
 }
 
@@ -78,6 +87,14 @@ void Quit() {
     // raylib cleanup functions run here
     UnloadAssets();
     exit(0);
+}
+
+void Pause() {
+
+}
+
+void Unpause() {
+
 }
 
 void TileBackground() {
@@ -106,4 +123,22 @@ void TileBackground() {
 // runs the death animation and transitions to endscreen
 void KillPlayer() {
     LoadScene(SCENE_ENDSCREEN);
+}
+
+bool WindowMovedToNewMonitor() {
+    return game.current_monitor != GetCurrentMonitor();
+}
+
+void ResizeDisplayToMonitor() {
+    game.current_monitor = GetCurrentMonitor();
+    game.screen_size = (Vector2) {
+        GetMonitorWidth(game.current_monitor),
+        GetMonitorHeight(game.current_monitor)
+    };
+
+    UnloadRenderTexture(game.render_texture);
+    game.render_texture = LoadRenderTexture(game.screen_size.x,
+        game.screen_size.y);
+    SetWindowSize(game.screen_size.x, game.screen_size.y);
+    MaximizeWindow();
 }

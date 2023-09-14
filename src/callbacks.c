@@ -337,3 +337,8 @@ void KeybindMoveRightCallback() {
     game.player->pos.x += game.player->entity_speed;
 }
 
+void KeybindTogglePauseCallback() {
+    game.paused
+        ? Unpause()
+        : Pause();
+}

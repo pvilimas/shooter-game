@@ -5,11 +5,9 @@
 
 /*
     TODO
-    - start handling resolutions
     - pause menu
-            - make game draw to rendertexture the size of th screen
-    - add keybind objects with callbacks
-    - debug mode
+        - make game draw to rendertexture the size of th screen
+    - start handling resolutions
     - fix in-game timer
     - proper hitboxes and collision shapes
         - shape type
@@ -41,12 +39,14 @@ void        Init();
 void        Draw();
 void        Quit();
 
-// TODO
 void        Pause();
 void        Unpause();
 
 void        TileBackground();
 void        KillPlayer();
+
+bool        WindowMovedToNewMonitor();
+void        ResizeDisplayToMonitor();
 
 // scene.c
 void        LoadScene(Scene new_scene);
@@ -98,7 +98,8 @@ void        DeleteFont(const char* name);
 
 void        HandleInput();
 
-void        CreateKeybind(const char* name, int key_code, KeybindCallback);
+void        CreateKeybind(const char* name, int key_code,
+                KeybindCallback callback, int delay_ms);
 void        RemapKeybind(const char* name, int new_key_code);
 void        DeleteKeybind(const char* name);
 
@@ -134,5 +135,6 @@ void        KeybindMoveUpCallback();
 void        KeybindMoveDownCallback();
 void        KeybindMoveLeftCallback();
 void        KeybindMoveRightCallback();
+void        KeybindTogglePauseCallback();
 
 #endif // GAME_H

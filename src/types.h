@@ -15,8 +15,9 @@
 
 #include "dev.h"
 
-#define WINDOW_TITLE "Shooter Game"
-#define DEV_MODE true // see dev.c
+#define WINDOW_TITLE    "Shooter Game"
+#define DEV_MODE        true
+#define OBJ_SLOT_COUNT  1000
 
 typedef void (*KeybindCallback)();
 typedef void (*ObjCallback)(void* object);
@@ -27,6 +28,7 @@ typedef struct {
     const char*     name;
     int             key_code;
     KeybindCallback callback;
+    int             delay_ms; // -1 = one time, 0 = hold, >0 = hold with delay
 } Keybind;
 
 typedef enum {
@@ -40,8 +42,6 @@ typedef enum {
 // object - any game element
 // game has limited # of object slots
 // each object has 2 methods: update and render (each called once per frame)
-
-#define OBJ_SLOT_COUNT 1000
 
 // object type
 typedef enum {
@@ -126,12 +126,13 @@ typedef struct {
     Scene           current_scene;
     int             frame_count;            // increment every frame
     double          gameplay_time_elapsed;  // since user clicked start (sec)
+    int             current_monitor;        // for checking if window was moved
 
     GHashTable*     textures;               // <cchar*, Texture2D*>
     GHashTable*     fonts;                  // <cchar*, Font*>
     GHashTable*     keybinds;               // <cchar*, Keybind*>
 
-    RenderTexture   render_texture;         // for pause screen backdrop
+    RenderTexture2D render_texture;         // for pause screen backdrop
 
     Object          objects[OBJ_TYPE_COUNT][OBJ_SLOT_COUNT];
     char            buffer[1000];
