@@ -12,7 +12,6 @@
         - all hitboxes are drawn
 */
 
-
 #define DevStringify(x) \
     #x
 
@@ -23,15 +22,15 @@
     do { \
         if (DEV_MODE) { \
             if ((cond)) \
-                printf("[DEVLOG] Assertion Passed @ %s:%d - `%s`\m", \
-                    DevStringify((cond)), \
+                printf("[DEVLOG] Assertion Passed @ %s:%d - `%s`\n", \
                     DevFmtFile(__FILE__), \
-                    __LINE__); \
+                    __LINE__, \
+                    DevStringify((cond))); \
             else { \
                 printf("[DEVLOG] Assertion Failed @ %s:%d - `%s`, exiting\n", \
-                    DevStringify((cond)), \
                     DevFmtFile(__FILE__), \
-                    __LINE__); \
+                    __LINE__, \
+                    DevStringify((cond))); \
                 exit(1); \
             } \
         } \

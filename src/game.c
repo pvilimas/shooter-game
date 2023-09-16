@@ -5,17 +5,29 @@ void Config() {
     srand(time(NULL));
 
     SetTraceLogLevel(LOG_WARNING);
-    SetConfigFlags(FLAG_VSYNC_HINT | FLAG_MSAA_4X_HINT);
+    SetConfigFlags(FLAG_VSYNC_HINT
+        | FLAG_MSAA_4X_HINT
+        | FLAG_WINDOW_RESIZABLE
+        // | FLAG_WINDOW_UNDECORATED
+        | FLAG_WINDOW_TOPMOST);
     InitWindow(GetScreenWidth(), GetScreenHeight(), WINDOW_TITLE);
-    MaximizeWindow();
+    game.current_monitor = GetCurrentMonitor();
     game.screen_size = (Vector2) {
         GetMonitorWidth(game.current_monitor),
-        GetMonitorHeight(game.current_monitor)
-    };
+        GetMonitorHeight(game.current_monitor)};\
 
-    // disable exit key when not debugging
-    if (!DEV_MODE) SetExitKey(0);
-    // for dev mode, make sure cwd is shooter-game not build
+    DevPrintf("Detected monitor size: (%d, %d)",
+        (int) game.screen_size.x,
+        (int) game.screen_size.y);
+
+    SetWindowSize((int) game.screen_size.x, (int) game.screen_size.y);
+    DevPrintf("Set monitor size to (%d, %d) fullscreen",
+        (int) game.screen_size.x,
+        (int) game.screen_size.y);
+
+    // disable exit key 
+    // SetExitKey(0);
+    // make sure cwd is shooter-game not build
     ChangeDirectory("..");
     SetTargetFPS(60);
 }
@@ -32,27 +44,30 @@ void Init() {
         NULL, MemFreeFontCallback);
     game.keybinds = g_hash_table_new_full(g_str_hash, g_str_equal,
         NULL, free);
+    game.shaders = g_hash_table_new_full(g_str_hash, g_str_equal,
+        NULL, MemFreeShaderCallback);
 
     // load assets
 
-    CreateTexture("healthbar_1", "assets/healthbar_1.png");
-    CreateTexture("healthbar_2", "assets/healthbar_2.png");
-    CreateTexture("healthbar_3", "assets/healthbar_3.png");
-    CreateTexture("healthbar_4", "assets/healthbar_4.png");
-    CreateTexture("healthbar_5", "assets/healthbar_5.png");
-    CreateTexture("background", "assets/bg_new_new.png");
+    CreateTexture("healthbar_1", "assets/images/healthbar_1.png");
+    CreateTexture("healthbar_2", "assets/images/healthbar_2.png");
+    CreateTexture("healthbar_3", "assets/images/healthbar_3.png");
+    CreateTexture("healthbar_4", "assets/images/healthbar_4.png");
+    CreateTexture("healthbar_5", "assets/images/healthbar_5.png");
+    CreateTexture("background", "assets/images/bg_new_new.png");
+
+    // TODO write these shaders to make gaussian blur on the pause screen
+
+    CreateShader("pause menu", "assets/shaders/pause_menu.vert",
+        "assets/shaders/pause_menu.frag");
 
     CreateKeybind("move up", KEY_W, KeybindMoveUpCallback, 0);
     CreateKeybind("move down", KEY_S, KeybindMoveDownCallback, 0);
     CreateKeybind("move left", KEY_A, KeybindMoveLeftCallback, 0);
     CreateKeybind("move right", KEY_D, KeybindMoveRightCallback, 0);
-    CreateKeybind("toggle pause", KEY_P, KeybindTogglePauseCallback, 200);
+    CreateKeybind("toggle pause", KEY_P, KeybindTogglePauseCallback, 0);
 
     game.frame_count = 0;
-    game.screen_size = (Vector2) {
-        GetScreenWidth(),
-        GetScreenHeight()
-    };
 
     // create camera
     game.camera = (Camera2D) {
@@ -62,7 +77,6 @@ void Init() {
         .zoom = 1.0f
     };
 
-    game.current_monitor = GetCurrentMonitor();
     game.render_texture = LoadRenderTexture(game.screen_size.x,
         game.screen_size.y);
 
@@ -90,11 +104,16 @@ void Quit() {
 }
 
 void Pause() {
+    game.paused = true;
 
+    // update texture for pause menu shader
+    Shader* s = GetShader("pause menu");
+    SetShaderValueTexture(*s, GetShaderLocation(*s, "tex"),
+        game.render_texture.texture);
 }
 
 void Unpause() {
-
+    game.paused = false;
 }
 
 void TileBackground() {
@@ -141,4 +160,18 @@ void ResizeDisplayToMonitor() {
         game.screen_size.y);
     SetWindowSize(game.screen_size.x, game.screen_size.y);
     MaximizeWindow();
+
+    // update screen size for pause menu shader
+    Shader* s = GetShader("pause menu");
+    SetShaderValueV(*s, GetShaderLocation(*s, "screenSize"), &game.screen_size,
+        SHADER_UNIFORM_VEC2, 1);
+}
+
+void DrawRenderTexture() {
+    BeginDrawing();
+        DrawTextureRec(game.render_texture.texture,
+            (Rectangle){0, 0, game.render_texture.texture.width,
+                -game.render_texture.texture.height},
+            (Vector2){0, 0}, WHITE);
+    EndDrawing();
 }

@@ -82,25 +82,39 @@ void LoadSceneEndScreen() {
 }
 
 void DrawSceneStartScreen() {
-    BeginDrawing();
+    BeginTextureMode(game.render_texture);
 
         ClearBackground(RAYWHITE);
         UpdateObjects();
         RenderObjects();
 
-    EndDrawing();
+    EndTextureMode();
+    DrawRenderTexture();
 }
 
 void DrawSceneSettings() {
+    BeginTextureMode(game.render_texture);
 
+        ClearBackground(RAYWHITE);
+        UpdateObjects();
+        RenderObjects();
+
+    EndTextureMode();
 }
 
 void DrawSceneGameplay() {
+
+    if (game.paused) {
+        // BeginShaderMode(*GetShader("pause menu"));
+            DrawRenderTexture();
+        // EndShaderMode();
+        return;
+    }
+
     // update camera target to player
     game.camera.target = game.player->pos;
     HandleInput();
-
-    BeginDrawing();
+    BeginTextureMode(game.render_texture);
         BeginMode2D(game.camera);
 
             /* all in-game objects get drawn here */
@@ -112,19 +126,21 @@ void DrawSceneGameplay() {
         EndMode2D();
 
         /* static ui elements get drawn here */
+    
+    EndTextureMode();
 
-    EndDrawing();
     game.frame_count++;
     game.gameplay_time_elapsed += (double) GetFrameTime();
-   
+    DrawRenderTexture();
 }
 
 void DrawSceneEndScreen() {
-    BeginDrawing();
+    BeginTextureMode(game.render_texture);
 
         ClearBackground(RAYWHITE);
         UpdateObjects();
         RenderObjects();
 
-    EndDrawing();
+    EndTextureMode();
+    DrawRenderTexture();
 }

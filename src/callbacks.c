@@ -14,6 +14,11 @@ void MemFreeFontCallback(void* font) {
     free(font);
 }
 
+void MemFreeShaderCallback(void* shader) {
+    UnloadShader(*(Shader*)shader);
+    free(shader);
+}
+
 void TimerPlayerShootBasicBulletCallback() {
     Vector2 abs_mouse_pos = GetAbsMousePosition();
     int dx = abs_mouse_pos.x - game.player->pos.x;

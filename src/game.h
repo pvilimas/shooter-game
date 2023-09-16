@@ -5,8 +5,19 @@
 
 /*
     TODO
+    - completely rewrite objects
+    - make everything an object, even scenes
+        - add more functions to object like
+            - should_update() -> bool
+            - should_render() -> bool
+    - primary and secondary objects
+        - only primary ones get updated, and they trigger updates in
+            the objects they spawn/manage
+
+    - fix pause menu shader
+
     - pause menu
-        - make game draw to rendertexture the size of th screen
+        - handle inputs on pause screen
     - start handling resolutions
     - fix in-game timer
     - proper hitboxes and collision shapes
@@ -28,9 +39,21 @@
     - make some pixel art instead of drawing primitives
         - animate them
     - resolution menu like terraria has
+    - improve background tiling - allow for different tiles
     
     ideas:
     - camera damping/stays in front of player
+
+    list of all possible inputs:
+    - gameplay
+         - player move
+         - player shoot
+         - player use abilities
+         - anything else the player object can do in the game
+    - menus
+        - up/down/left/right in button menus
+        - mouse clicking on certain buttons (handled in their callbacks)
+    - gameplay pause state is handled separately
 */
 
 // game.c
@@ -47,6 +70,8 @@ void        KillPlayer();
 
 bool        WindowMovedToNewMonitor();
 void        ResizeDisplayToMonitor();
+
+void        DrawRenderTexture();
 
 // scene.c
 void        LoadScene(Scene new_scene);
@@ -94,6 +119,11 @@ void        CreateFont(const char* name, const char* filepath);
 Font*       GetFont(const char* name);
 void        DeleteFont(const char* name);
 
+void        CreateShader(const char* name, const char* vert_shader_path,
+                const char* frag_shader_path);
+Shader*     GetShader(const char* name);
+void        DeleteShader(const char* name);
+
 // keyinput.c
 
 void        HandleInput();
@@ -108,6 +138,7 @@ void        TestCallback();
 
 void        MemFreeTextureCallback(void* texture);
 void        MemFreeFontCallback(void* font);
+void        MemFreeShaderCallback(void* shader);
 
 void        TimerPlayerShootBasicBulletCallback();
 void        TimerSpawnBasicEnemyCallback();

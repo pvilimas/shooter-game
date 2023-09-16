@@ -15,6 +15,7 @@
 
 #include "dev.h"
 
+#define GLSL_VERSION    460
 #define WINDOW_TITLE    "Shooter Game"
 #define DEV_MODE        true
 #define OBJ_SLOT_COUNT  1000
@@ -25,10 +26,11 @@ typedef void (*TimerCallback)();
 typedef void (*UICallback)();
 
 typedef struct {
-    const char*     name;
-    int             key_code;
-    KeybindCallback callback;
-    int             delay_ms; // -1 = one time, 0 = hold, >0 = hold with delay
+    const char*         name;
+    int                 key_code;
+    KeybindCallback     callback;
+    // TODO actually make the delay_ms logic in HandleInput
+    int                 delay_ms; // -1 = one time, 0 = hold, >0 = hold with delay
 } Keybind;
 
 typedef enum {
@@ -131,6 +133,7 @@ typedef struct {
     GHashTable*     textures;               // <cchar*, Texture2D*>
     GHashTable*     fonts;                  // <cchar*, Font*>
     GHashTable*     keybinds;               // <cchar*, Keybind*>
+    GHashTable*     shaders;                // <cchar*, Shader*>
 
     RenderTexture2D render_texture;         // for pause screen backdrop
 
